@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CareerLens 🎯
  
 > Graph-powered career intelligence for students targeting their first tech role.
@@ -16,3 +17,6 @@
  
 ## Quick Start
 See SETUP.md for full instructions.
+=======
+# CareerLens
+>>>>>>> 4777e0d7af7c69f819d72d3f6df1439052574df6

@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import auth, users, jobs, recommendations, roadmap, resume
-from app.db.database import engine
-from app.db import models
-
-models.Base.metadata.create_all(bind=engine)
+# Schema is managed by Alembic now (see backend/alembic/). Run
+# `alembic upgrade head` to create/update tables instead of relying on
+# create_all() here — otherwise a missing migration can go unnoticed.
 
 app = FastAPI(title="CareerLens API", version="1.0.0")
 

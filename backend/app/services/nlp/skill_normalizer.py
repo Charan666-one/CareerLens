@@ -1,53 +1,92 @@
 """
-Resume text extraction.
+Skill normalization / extraction from raw resume text.
 
-Supports PDF (via PyMuPDF/fitz), DOCX (via python-docx), and plain text.
-Skill extraction from the resulting text lives in skill_normalizer.py -
-this module is only responsible for turning uploaded file bytes into text.
+Given free-text extracted from a resume (see resume_parser.py), find which
+known skills (from the `skills` table: name + aliases) are mentioned.
+
+Deliberately simple keyword/regex matching for now - no spaCy yet.
+That's a later step in the plan (see PROGRESS.md).
 """
-import io
+import re
+from typing import NamedTuple
+from uuid import UUID
 
-import fitz  # PyMuPDF
-from docx import Document
+from sqlalchemy.orm import Session
 
-SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
-
-
-class UnsupportedFileTypeError(ValueError):
-    pass
+from app.db.models import Skill
 
 
-def _extract_pdf_text(file_bytes: bytes) -> str:
-    with fitz.open(stream=file_bytes, filetype="pdf") as doc:
-        return "\n".join(page.get_text() for page in doc)
+class SkillTerm(NamedTuple):
+    skill_id: UUID
+    name: str
+    category: str | None
+    term: str          # the literal string to match (skill name or one alias)
+    pattern: re.Pattern
 
 
-def _extract_docx_text(file_bytes: bytes) -> str:
-    document = Document(io.BytesIO(file_bytes))
-    return "\n".join(paragraph.text for paragraph in document.paragraphs)
+def _build_pattern(term: str) -> re.Pattern:
+    """Case-insensitive, word-boundary regex for a single skill name/alias."""
+    escaped = re.escape(term.strip())
+    return re.compile(rf"\b{escaped}\b", re.IGNORECASE)
 
 
-def _extract_txt_text(file_bytes: bytes) -> str:
-    return file_bytes.decode("utf-8", errors="ignore")
-
-
-def extract_text(filename: str, file_bytes: bytes) -> str:
+def build_skill_lookup(db: Session) -> list[SkillTerm]:
     """
-    Extract raw text from an uploaded resume file. Dispatches on file
-    extension. Raises UnsupportedFileTypeError for anything else.
+    Precompute one SkillTerm (with compiled regex) per skill name AND per
+    alias, so extract_skills() can just scan this list against the text
+    without re-querying or re-compiling per call.
     """
-    lowered = filename.lower()
+    lookup: list[SkillTerm] = []
 
-    if lowered.endswith(".pdf"):
-        text = _extract_pdf_text(file_bytes)
-    elif lowered.endswith(".docx"):
-        text = _extract_docx_text(file_bytes)
-    elif lowered.endswith(".txt"):
-        text = _extract_txt_text(file_bytes)
-    else:
-        raise UnsupportedFileTypeError(
-            f"Unsupported file type for '{filename}'. "
-            f"Supported types: {', '.join(sorted(SUPPORTED_EXTENSIONS))}"
+    for skill in db.query(Skill).all():
+        lookup.append(
+            SkillTerm(
+                skill_id=skill.id,
+                name=skill.name,
+                category=skill.category,
+                term=skill.name,
+                pattern=_build_pattern(skill.name),
+            )
         )
+        for alias in skill.aliases or []:
+            lookup.append(
+                SkillTerm(
+                    skill_id=skill.id,
+                    name=skill.name,
+                    category=skill.category,
+                    term=alias,
+                    pattern=_build_pattern(alias),
+                )
+            )
 
-    return text.strip()
+    return lookup
+
+
+def extract_skills(
+    raw_text: str,
+    skill_lookup: list[SkillTerm],
+    db: Session,
+) -> list[dict]:
+    """
+    Match resume text against the precomputed skill lookup.
+    Returns one entry per matched skill (deduped - a skill matched via both
+    its name and an alias is only returned once, keeping the first match).
+    """
+    seen_skill_ids: set[UUID] = set()
+    matches: list[dict] = []
+
+    for entry in skill_lookup:
+        if entry.skill_id in seen_skill_ids:
+            continue
+        if entry.pattern.search(raw_text):
+            seen_skill_ids.add(entry.skill_id)
+            matches.append(
+                {
+                    "skill_id": entry.skill_id,
+                    "name": entry.name,
+                    "category": entry.category,
+                    "matched_on": entry.term,
+                }
+            )
+
+    return matches

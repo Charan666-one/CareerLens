@@ -1,0 +1,90 @@
+[
+  {
+    "title": "Backend Engineer",
+    "company": "Northwind Systems",
+    "description": "Build and maintain REST APIs and backend services.",
+    "required_skills": ["python", "fastapi", "postgresql", "docker"],
+    "experience_years": 1,
+    "salary_min": 60000,
+    "salary_max": 95000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Frontend Engineer",
+    "company": "Northwind Systems",
+    "description": "Build user-facing web applications with React and TypeScript.",
+    "required_skills": ["react", "typescript"],
+    "experience_years": 1,
+    "salary_min": 55000,
+    "salary_max": 90000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Data Scientist",
+    "company": "Insight Analytics",
+    "description": "Analyze datasets and build predictive models.",
+    "required_skills": ["python", "numpy", "pandas", "scikit-learn"],
+    "experience_years": 2,
+    "salary_min": 70000,
+    "salary_max": 110000,
+    "location": "Hyderabad, India",
+    "job_type": "full_time"
+  },
+  {
+    "title": "DevOps Engineer",
+    "company": "CloudForge",
+    "description": "Manage cloud infrastructure and deployment pipelines.",
+    "required_skills": ["docker", "aws", "postgresql"],
+    "experience_years": 2,
+    "salary_min": 65000,
+    "salary_max": 100000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Embedded Systems Engineer",
+    "company": "Voltrix Electronics",
+    "description": "Develop firmware for embedded devices using ARM microcontrollers.",
+    "required_skills": ["embedded-c", "arm-microcontrollers", "plc"],
+    "experience_years": 1,
+    "salary_min": 50000,
+    "salary_max": 85000,
+    "location": "Bangalore, India",
+    "job_type": "full_time"
+  },
+  {
+    "title": "VLSI Design Engineer",
+    "company": "Voltrix Electronics",
+    "description": "Design and verify digital circuits using HDL.",
+    "required_skills": ["verilog", "vhdl", "vlsi"],
+    "experience_years": 2,
+    "salary_min": 60000,
+    "salary_max": 95000,
+    "location": "Bangalore, India",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Signal Processing Engineer",
+    "company": "Wavelength Labs",
+    "description": "Design DSP algorithms for communication systems.",
+    "required_skills": ["matlab", "signal-processing", "python"],
+    "experience_years": 2,
+    "salary_min": 62000,
+    "salary_max": 98000,
+    "location": "Hyderabad, India",
+    "job_type": "full_time"
+  },
+  {
+    "title": "PCB Design Engineer",
+    "company": "Circuitry Works",
+    "description": "Design and layout printed circuit boards for consumer electronics.",
+    "required_skills": ["pcb-design", "autocad-electrical", "embedded-c"],
+    "experience_years": 1,
+    "salary_min": 48000,
+    "salary_max": 80000,
+    "location": "Chennai, India",
+    "job_type": "full_time"
+  }
+]

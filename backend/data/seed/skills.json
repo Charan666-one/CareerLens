@@ -1,1 +1,197 @@
-[{"name":"python","aliases":["Python","py"],"category":"backend","market_demand":0.92,"avg_learn_weeks":6},{"name":"numpy","aliases":["NumPy","np"],"category":"ml","market_demand":0.78,"avg_learn_weeks":2},{"name":"pandas","aliases":["Pandas","pd"],"category":"ml","market_demand":0.80,"avg_learn_weeks":3},{"name":"scikit-learn","aliases":["sklearn"],"category":"ml","market_demand":0.75,"avg_learn_weeks":4},{"name":"fastapi","aliases":["FastAPI"],"category":"backend","market_demand":0.61,"avg_learn_weeks":3},{"name":"postgresql","aliases":["postgres"],"category":"backend","market_demand":0.70,"avg_learn_weeks":4},{"name":"docker","aliases":["Docker"],"category":"devops","market_demand":0.68,"avg_learn_weeks":3},{"name":"aws","aliases":["AWS"],"category":"devops","market_demand":0.74,"avg_learn_weeks":8},{"name":"react","aliases":["React"],"category":"frontend","market_demand":0.72,"avg_learn_weeks":6},{"name":"typescript","aliases":["TypeScript"],"category":"frontend","market_demand":0.65,"avg_learn_weeks":3}]
+[
+  {
+    "name": "python",
+    "aliases": [
+      "Python",
+      "py"
+    ],
+    "category": "backend",
+    "market_demand": 0.92,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "numpy",
+    "aliases": [
+      "NumPy",
+      "np"
+    ],
+    "category": "ml",
+    "market_demand": 0.78,
+    "avg_learn_weeks": 2
+  },
+  {
+    "name": "pandas",
+    "aliases": [
+      "Pandas",
+      "pd"
+    ],
+    "category": "ml",
+    "market_demand": 0.8,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "scikit-learn",
+    "aliases": [
+      "sklearn"
+    ],
+    "category": "ml",
+    "market_demand": 0.75,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "fastapi",
+    "aliases": [
+      "FastAPI"
+    ],
+    "category": "backend",
+    "market_demand": 0.61,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "postgresql",
+    "aliases": [
+      "postgres"
+    ],
+    "category": "backend",
+    "market_demand": 0.7,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "docker",
+    "aliases": [
+      "Docker"
+    ],
+    "category": "devops",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "aws",
+    "aliases": [
+      "AWS"
+    ],
+    "category": "devops",
+    "market_demand": 0.74,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "react",
+    "aliases": [
+      "React"
+    ],
+    "category": "frontend",
+    "market_demand": 0.72,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "typescript",
+    "aliases": [
+      "TypeScript"
+    ],
+    "category": "frontend",
+    "market_demand": 0.65,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "verilog",
+    "aliases": [
+      "Verilog",
+      "Verilog HDL"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "vhdl",
+    "aliases": [
+      "VHDL"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.5,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "embedded-c",
+    "aliases": [
+      "Embedded C",
+      "embedded systems"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "matlab",
+    "aliases": [
+      "MATLAB",
+      "Simulink"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.6,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "plc",
+    "aliases": [
+      "PLC",
+      "PLC programming",
+      "ladder logic"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.52,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "pcb-design",
+    "aliases": [
+      "PCB Design",
+      "PCB layout",
+      "Altium"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.58,
+    "avg_learn_weeks": 7
+  },
+  {
+    "name": "vlsi",
+    "aliases": [
+      "VLSI",
+      "VLSI design"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.48,
+    "avg_learn_weeks": 10
+  },
+  {
+    "name": "signal-processing",
+    "aliases": [
+      "Signal Processing",
+      "DSP"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.56,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "arm-microcontrollers",
+    "aliases": [
+      "ARM",
+      "microcontrollers",
+      "STM32"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.62,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "autocad-electrical",
+    "aliases": [
+      "AutoCAD Electrical",
+      "AutoCAD"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.45,
+    "avg_learn_weeks": 4
+  }
+]

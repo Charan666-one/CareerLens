@@ -1,9 +1,11 @@
 """
-Seed the `skills` and `skill_edges` tables from the JSON files in
+Seed the `skills`, `skill_edges`, and `jobs` tables from the JSON files in
 backend/data/seed/.
 
-Safe to re-run: uses upserts (INSERT ... ON CONFLICT DO UPDATE), keyed on
-Skill.name and SkillEdge.(parent_skill_id, child_skill_id).
+Safe to re-run: skills/edges use upserts (INSERT ... ON CONFLICT DO UPDATE),
+keyed on Skill.name and SkillEdge.(parent_skill_id, child_skill_id).
+Jobs have no unique DB constraint, so they're matched on (title, company)
+via query-then-update-or-insert instead.
 
 Run migrations first so the tables exist:
     alembic upgrade head
@@ -18,11 +20,12 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 from app.db.database import SessionLocal
-from app.db.models import Skill, SkillEdge
+from app.db.models import Job, Skill, SkillEdge
 
 SEED_DIR = Path(__file__).resolve().parents[2] / "data" / "seed"
 SKILLS_FILE = SEED_DIR / "skills.json"
 EDGES_FILE = SEED_DIR / "edges.json"
+JOBS_FILE = SEED_DIR / "jobs.json"
 
 
 def load_json(path: Path):
@@ -107,11 +110,65 @@ def seed_edges(db: Session, name_to_id: dict) -> None:
         )
 
 
+def seed_jobs(db: Session, name_to_id: dict) -> None:
+    """
+    Insert-or-update jobs matched on (title, company). Warns (does not
+    fail) if a job's required_skills references a skill name not present
+    in skills.json, same pattern as seed_edges.
+    """
+    jobs_data = load_json(JOBS_FILE)
+
+    unknown_skills = set()
+    upserted = 0
+
+    for row in jobs_data:
+        for skill_name in row.get("required_skills", []):
+            if skill_name not in name_to_id:
+                unknown_skills.add(skill_name)
+
+        existing = (
+            db.query(Job)
+            .filter(Job.title == row["title"], Job.company == row.get("company"))
+            .first()
+        )
+
+        fields = dict(
+            description=row.get("description"),
+            required_skills=row.get("required_skills", []),
+            experience_years=row.get("experience_years", 0),
+            salary_min=row.get("salary_min"),
+            salary_max=row.get("salary_max"),
+            location=row.get("location"),
+            job_type=row.get("job_type"),
+        )
+
+        if existing:
+            for key, value in fields.items():
+                setattr(existing, key, value)
+        else:
+            db.add(Job(title=row["title"], company=row.get("company"), **fields))
+
+        upserted += 1
+
+    db.commit()
+    print(f"Seeded {upserted} jobs.")
+
+    if unknown_skills:
+        print(
+            f"\nWARNING: {len(unknown_skills)} skill name(s) in jobs.json "
+            "don't match any seeded skill (job will still be created, "
+            "just won't match on that skill during recommendation scoring):"
+        )
+        for name in sorted(unknown_skills):
+            print(f"  - {name}")
+
+
 def main():
     db = SessionLocal()
     try:
         name_to_id = seed_skills(db)
         seed_edges(db, name_to_id)
+        seed_jobs(db, name_to_id)
     finally:
         db.close()
 

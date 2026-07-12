@@ -77,3 +77,37 @@ class Roadmap(Base):
     estimated_weeks = Column(Integer)
     jobs_unlocked = Column(Integer)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class AnalysisState(Base):
+    """
+    One row per user holding the full 7-stage pipeline state. Each stage
+    owns exactly one JSON column + one `_updated_at` timestamp column, and
+    a stage's route only ever touches its own column(s) - running a later
+    stage never overwrites an earlier one.
+    """
+    __tablename__ = "analysis_states"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), unique=True, nullable=False)
+
+    profile = Column(JSON)
+    profile_updated_at = Column(DateTime(timezone=True))
+
+    strengths = Column(JSON)
+    strengths_updated_at = Column(DateTime(timezone=True))
+
+    suitability = Column(JSON)
+    suitability_updated_at = Column(DateTime(timezone=True))
+
+    skill_gap = Column(JSON)
+    skill_gap_updated_at = Column(DateTime(timezone=True))
+
+    roadmap = Column(JSON)
+    roadmap_updated_at = Column(DateTime(timezone=True))
+
+    resume_score = Column(JSON)
+    resume_score_updated_at = Column(DateTime(timezone=True))
+
+    recommendations = Column(JSON)
+    recommendations_updated_at = Column(DateTime(timezone=True))
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

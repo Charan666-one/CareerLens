@@ -91,6 +91,10 @@ class AnalysisState(Base):
 
     profile = Column(JSON)
     profile_updated_at = Column(DateTime(timezone=True))
+    # Raw resume text captured at the profile stage - later stages
+    # (suitability, skill_gap) reuse it for TF-IDF textual similarity
+    # scoring instead of re-deriving it from the profile JSON summary.
+    resume_text = Column(Text)
 
     strengths = Column(JSON)
     strengths_updated_at = Column(DateTime(timezone=True))

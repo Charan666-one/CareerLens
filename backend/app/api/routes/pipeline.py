@@ -25,7 +25,12 @@ from app.schemas.pipeline import (
     SuitabilityStageResponse,
     StrengthsStageResponse,
 )
-from app.services.graph.skill_graph import weighted_skill_gap
+from app.services.graph.skill_graph import (
+    DEMAND_WEIGHT as SKILL_GAP_DEMAND_WEIGHT,
+    PROXIMITY_WEIGHT,
+    TEXT_WEIGHT as SKILL_GAP_TEXT_WEIGHT,
+    weighted_skill_gap,
+)
 from app.services.nlp.resume_parser import UnsupportedFileTypeError, extract_text
 from app.services.nlp.skill_normalizer import build_skill_lookup, extract_skills
 from app.services.pipeline.state import (
@@ -36,7 +41,12 @@ from app.services.pipeline.state import (
 )
 from app.services.profile.builder import build_identity_profile
 from app.services.profile.strengths import analyze_strengths
-from app.services.recommendation.engine import score_roles
+from app.services.recommendation.engine import (
+    DEMAND_WEIGHT as SUITABILITY_DEMAND_WEIGHT,
+    GRAPH_WEIGHT,
+    TEXT_WEIGHT as SUITABILITY_TEXT_WEIGHT,
+    score_roles,
+)
 from app.services.recommendation.explainer import build_recommendations
 from app.services.resume_score.scorer import score_resume
 from app.services.roadmap.generator import sequence_roadmap
@@ -95,6 +105,10 @@ async def run_profile_stage(
     now = datetime.now(timezone.utc)
     state.profile = profile_data
     state.profile_updated_at = now
+    # Kept for later stages (suitability, skill_gap) that need the raw
+    # text for TF-IDF textual similarity - the profile JSON above only
+    # stores the derived summary, not the source text.
+    state.resume_text = raw_text
     db.commit()
 
     return ProfileStageResponse(**profile_data, updated_at=now)
@@ -127,8 +141,20 @@ def run_suitability_stage(
     state = get_or_create_state(db, current_user.id)
     require_stage(state, "profile", "profile")
 
-    roles = score_roles(db, state.profile["extracted_skills"], payload.target_roles)
-    result = {"roles": roles}
+    roles = score_roles(
+        db,
+        state.profile["extracted_skills"],
+        payload.target_roles,
+        resume_text=state.resume_text or "",
+    )
+    result = {
+        "roles": roles,
+        "weights": {
+            "score_text": SUITABILITY_TEXT_WEIGHT,
+            "score_graph": GRAPH_WEIGHT,
+            "score_demand": SUITABILITY_DEMAND_WEIGHT,
+        },
+    }
 
     now = datetime.now(timezone.utc)
     state.suitability = result
@@ -152,8 +178,21 @@ def run_skill_gap_stage(
         if r["role_title"].lower() == payload.target_role.lower()
     )
     user_skill_names = {s["name"] for s in state.profile["extracted_skills"]}
-    missing_skills = weighted_skill_gap(db, user_skill_names, role["missing_skills"])
-    result = {"target_role": role["role_title"], "missing_skills": missing_skills}
+    missing_skills = weighted_skill_gap(
+        db,
+        user_skill_names,
+        role["missing_skills"],
+        resume_text=state.resume_text or "",
+    )
+    result = {
+        "target_role": role["role_title"],
+        "missing_skills": missing_skills,
+        "weights": {
+            "score_text": SKILL_GAP_TEXT_WEIGHT,
+            "graph_proximity": PROXIMITY_WEIGHT,
+            "market_demand": SKILL_GAP_DEMAND_WEIGHT,
+        },
+    }
 
     now = datetime.now(timezone.utc)
     state.skill_gap = result

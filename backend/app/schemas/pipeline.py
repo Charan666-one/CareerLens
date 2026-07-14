@@ -42,13 +42,16 @@ class RoleSuitabilityOut(BaseModel):
     role_title: str
     matched_skills: list[str]
     missing_skills: list[str]
-    score_overlap: float
-    score_demand: float
-    final_score: float
+    score_overlap: float       # informational only - see score_graph
+    score_text: float          # TF-IDF similarity: resume vs role description
+    score_graph: float         # skill-graph proximity to required_skills
+    score_demand: float        # avg market_demand across required_skills
+    final_score: float         # weighted sum of score_text/score_graph/score_demand
 
 
 class SuitabilityStageResponse(BaseModel):
     roles: list[RoleSuitabilityOut]
+    weights: dict[str, float]  # {"score_text", "score_graph", "score_demand"} -> weight
     updated_at: datetime
 
 
@@ -61,13 +64,15 @@ class SkillGapItemOut(BaseModel):
     category: Optional[str] = None
     market_demand: float
     avg_learn_weeks: int
-    graph_proximity: float
-    importance_score: float
+    score_text: float          # TF-IDF similarity: resume vs jobs requiring this skill
+    graph_proximity: float     # skill-graph proximity to the candidate's known skills
+    importance_score: float    # weighted sum of score_text/graph_proximity/market_demand
 
 
 class SkillGapStageResponse(BaseModel):
     target_role: str
     missing_skills: list[SkillGapItemOut]
+    weights: dict[str, float]  # {"score_text", "graph_proximity", "market_demand"} -> weight
     updated_at: datetime
 
 

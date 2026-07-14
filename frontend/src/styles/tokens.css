@@ -1,0 +1,40 @@
+:root {
+  --ink: #12191a;
+  --ink-raised: #1a2325;
+  --ink-line: #2c3739;
+  --ink-text: #e9e5da;
+  --ink-text-dim: #9aa5a3;
+
+  --stone: #eceee9;
+  --stone-raised: #ffffff;
+  --stone-line: #d9d9d0;
+  --text: #1d2523;
+  --text-dim: #5b625d;
+
+  --brass: #b8863f;
+  --brass-rgb: 184 134 63;
+  --brass-strong: #8f6529;
+
+  --good: #4f7d6a;
+  --good-rgb: 79 125 106;
+
+  --warn: #a8503f;
+  --warn-rgb: 168 80 63;
+
+  --display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --stone: #14181a;
+    --stone-raised: #1b2022;
+    --stone-line: #2b3234;
+    --text: #e6e2d6;
+    --text-dim: #9a9d97;
+    color-scheme: dark;
+  }
+}

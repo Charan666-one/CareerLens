@@ -18,6 +18,10 @@ implementation and is stale.
 
 ### Backend (from `backend/`, with venv active)
 
+A working venv (`venv311`, Python 3.11) already exists in `backend/` with all dependencies installed —
+activate it directly (`source venv311/bin/activate`) instead of creating a new one, unless you specifically
+need to reinstall.
+
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt

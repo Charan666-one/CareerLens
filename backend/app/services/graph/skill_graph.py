@@ -1,15 +1,44 @@
 """
 Prerequisite-graph analysis over the `skill_edges` table, used by the
-skill-gap pipeline stage to weight missing skills by graph proximity to
-the candidate's existing skills (not just raw market demand).
+skill-gap pipeline stage to weight missing skills by a hybrid of graph
+proximity, TF-IDF textual similarity, and market demand (not just raw
+market demand alone).
 """
 import networkx as nx
 from sqlalchemy.orm import Session
 
 from app.db.models import Skill, SkillEdge
+from app.services.nlp.job_corpus import description_corpus_by_skill
+from app.services.nlp.text_similarity import similarity_scores
 
-PROXIMITY_WEIGHT = 0.6
-DEMAND_WEIGHT = 0.4
+# Symmetric with recommendation/engine.py's TEXT_WEIGHT/GRAPH_WEIGHT/
+# DEMAND_WEIGHT by design - graph proximity anchors both stages (most
+# discriminating signal), demand is second, and text is weighted lowest
+# since the 8-job seed corpus gives TF-IDF real but statistically limited
+# power.
+TEXT_WEIGHT = 0.30
+PROXIMITY_WEIGHT = 0.45
+DEMAND_WEIGHT = 0.25
+
+
+def _combine_skill_gap(score_text: float, graph_proximity: float, market_demand: float) -> dict:
+    """
+    The one place the skill-gap hybrid's weighted sum happens - pure and
+    DB-free so it's directly unit-testable. Every score this returns is
+    traceable to these three named components, not a black-box number.
+    """
+    final_score = round(
+        TEXT_WEIGHT * score_text
+        + PROXIMITY_WEIGHT * graph_proximity
+        + DEMAND_WEIGHT * (market_demand or 0.0),
+        4,
+    )
+    return {
+        "score_text": round(score_text, 4),
+        "graph_proximity": round(graph_proximity, 4),
+        "market_demand": market_demand or 0.0,
+        "final_score": final_score,
+    }
 
 
 def build_graph(db: Session) -> nx.DiGraph:
@@ -39,13 +68,21 @@ def weighted_skill_gap(
     db: Session,
     user_skill_names: set[str],
     missing_skill_names: list[str],
+    resume_text: str = "",
 ) -> list[dict]:
     """
-    For each missing skill, find its shortest-path distance (via
-    prerequisite/enablement edges) from the nearest skill the candidate
-    already has, and blend that proximity with the skill's market demand
-    into a single importance_score. Missing skills unreachable from any
-    owned skill get graph_proximity 0 and are ranked on demand alone.
+    For each missing skill, blend three signals into a single
+    importance_score (see _combine_skill_gap): graph proximity (shortest
+    prerequisite/enablement path from the nearest skill the candidate
+    already has), TF-IDF textual similarity (resume vs the descriptions of
+    jobs that require this skill), and market demand. Missing skills
+    unreachable from any owned skill get graph_proximity 0 and are ranked
+    on the other two signals.
+
+    Changing these weights (see TEXT_WEIGHT/PROXIMITY_WEIGHT/DEMAND_WEIGHT
+    above) will reorder downstream roadmap sequencing
+    (roadmap/generator.py::sequence_roadmap tie-breaks on this score) -
+    that's expected, not a regression.
     """
     graph = build_graph(db)
 
@@ -60,26 +97,30 @@ def weighted_skill_gap(
         for s in db.query(Skill).filter(Skill.name.in_(missing_skill_names)).all()
     }
 
+    skill_corpus = description_corpus_by_skill(db, missing_skill_names)
+    text_scores = similarity_scores(
+        resume_text, [skill_corpus.get(name, "") for name in missing_skill_names]
+    )
+
     results = []
-    for name in missing_skill_names:
+    for name, score_text in zip(missing_skill_names, text_scores):
         skill = skill_rows.get(name)
         market_demand = skill.market_demand if skill else 0.0
 
         distance = distances.get(name)
-        graph_proximity = round(1.0 / (1.0 + distance), 4) if distance is not None else 0.0
+        graph_proximity = 1.0 / (1.0 + distance) if distance is not None else 0.0
 
-        importance_score = round(
-            PROXIMITY_WEIGHT * graph_proximity + DEMAND_WEIGHT * (market_demand or 0.0), 4
-        )
+        combined = _combine_skill_gap(score_text, graph_proximity, market_demand)
 
         results.append(
             {
                 "name": name,
                 "category": skill.category if skill else None,
-                "market_demand": market_demand,
                 "avg_learn_weeks": skill.avg_learn_weeks if skill else 4,
-                "graph_proximity": graph_proximity,
-                "importance_score": importance_score,
+                "score_text": combined["score_text"],
+                "graph_proximity": combined["graph_proximity"],
+                "market_demand": combined["market_demand"],
+                "importance_score": combined["final_score"],
             }
         )
 

@@ -1,0 +1,16 @@
+# Local virtualenvs - dependencies are installed into the image's own
+# system python by `pip install -r requirements.txt`, so copying these in
+# adds ~575MB of dead weight (and the wrong platform's binaries).
+venv311/
+.venv/
+venv/
+
+# Secrets - pydantic-settings reads .env if present, so never bake the
+# local dev SECRET_KEY/DATABASE_URL into a built image. Real deployments
+# inject these as environment variables.
+.env
+.env.*
+
+__pycache__/
+*.py[cod]
+.pytest_cache/

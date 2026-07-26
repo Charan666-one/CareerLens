@@ -1,5 +1,3 @@
-version: "3.9"
- 
 services:
   postgres:
     image: postgres:15-alpine
@@ -11,27 +9,46 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
- 
+    # The backend runs `alembic upgrade head` on boot, so it has to wait
+    # for Postgres to actually accept connections, not just for the
+    # container to exist.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d careerlens"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
   backend:
     build: ./backend
     ports:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql://postgres:password@postgres:5432/careerlens
+      # Settings.SECRET_KEY has no default, so without this the app fails
+      # its pydantic validation at import time and the container crash-loops.
+      # Local-only throwaway value; real deployments inject their own.
+      SECRET_KEY: local-dev-only-not-a-real-secret
+      CORS_ORIGINS: http://localhost:5173
     depends_on:
-      - postgres
-    volumes:
-      - ./backend:/app
- 
+      postgres:
+        condition: service_healthy
+
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        # Vite inlines this at BUILD time, so it must be a build arg - it
+        # cannot be changed by setting an env var at run time.
+        VITE_API_BASE_URL: http://localhost:8000
     ports:
       - "5173:5173"
+    environment:
+      # The image serves via Caddy, whose Caddyfile binds to :{$PORT}.
+      # Without this it resolves to ":" and Caddy falls back to 443/80, so
+      # nothing answers on the mapped 5173.
+      PORT: 5173
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
- 
+
 volumes:
   postgres_data:

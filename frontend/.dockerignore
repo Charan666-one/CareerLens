@@ -1,0 +1,9 @@
+# `npm ci` reinstalls these inside the builder stage; copying the host's
+# node_modules in is slow and can carry the wrong platform's binaries.
+node_modules/
+
+# Rebuilt by `npm run build` in the image.
+dist/
+
+.env
+.env.*

@@ -9,6 +9,7 @@ annotated with the highest-demand skills they're missing there.
 from sqlalchemy.orm import Session
 
 from app.db.models import Skill
+from app.services.market import demand_by_skill_name
 
 STRENGTH_MIN_SKILL_COUNT = 2
 STRENGTH_MIN_AVG_DEMAND = 0.6
@@ -17,7 +18,7 @@ MAX_MISSING_SKILLS_PER_WEAKNESS = 3
 
 def analyze_strengths(db: Session, extracted_skills: list[dict]) -> dict:
     user_skill_names = {entry["name"] for entry in extracted_skills}
-    demand_by_name = dict(db.query(Skill.name, Skill.market_demand).all())
+    demand_by_name = demand_by_skill_name(db)
 
     by_category: dict[str, dict] = {}
     for entry in extracted_skills:

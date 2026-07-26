@@ -15,7 +15,8 @@ demand. See _combine_suitability() for where those three combine.
 from sqlalchemy.orm import Session
 import networkx as nx
 
-from app.db.models import Job, Skill
+from app.db.models import Job
+from app.services.market import demand_by_skill_name
 from app.services.graph.skill_graph import build_graph
 from app.services.nlp.job_corpus import description_corpus_by_title
 from app.services.nlp.text_similarity import similarity_scores
@@ -91,7 +92,7 @@ def score_jobs(db: Session, extracted_skills: list[dict]) -> list[dict]:
     user_skills = _user_skill_names(extracted_skills)
 
     # market_demand lookup, keyed by skill name, for score_demand
-    demand_by_name = dict(db.query(Skill.name, Skill.market_demand).all())
+    demand_by_name = demand_by_skill_name(db)
 
     results = []
     for job in db.query(Job).all():
@@ -138,7 +139,7 @@ def score_roles(
     graduated partial credit instead of zero.
     """
     user_skills = _user_skill_names(extracted_skills)
-    demand_by_name = dict(db.query(Skill.name, Skill.market_demand).all())
+    demand_by_name = demand_by_skill_name(db)
 
     required_by_title: dict[str, set[str]] = {}
     for job in db.query(Job).all():

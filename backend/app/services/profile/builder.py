@@ -8,7 +8,8 @@ heuristic/rule-based, matching the rest of the codebase's current style.
 """
 from sqlalchemy.orm import Session
 
-from app.db.models import Skill, User
+from app.db.models import User
+from app.services.market import demand_by_skill_name
 
 EXPERIENCE_BANDS = (
     (0, "entry-level"),
@@ -30,7 +31,7 @@ def build_identity_profile(db: Session, extracted_skills: list[dict], user: User
     extracted_skills: list of {skill_id, name, category, matched_on} dicts,
     as produced by skill_normalizer.extract_skills().
     """
-    demand_by_name = dict(db.query(Skill.name, Skill.market_demand).all())
+    demand_by_name = demand_by_skill_name(db)
 
     by_category: dict[str, dict] = {}
     for entry in extracted_skills:

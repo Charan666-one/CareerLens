@@ -37,6 +37,14 @@ export default function StageTracker() {
   const doneCount = STAGES.filter((s) => statuses[s.key] === "success").length
   const firstNonDoneIndex = STAGES.findIndex((s) => statuses[s.key] !== "success")
 
+  // The connecting line is drawn across the GAPS between nodes, so 7 nodes
+  // means 6 gaps. It also advances only through the leading run of finished
+  // stages: resume_score is independent of the main chain, so finishing it
+  // first must not drag the line past stages that haven't run.
+  const gapCount = STAGES.length - 1
+  const leadingDone = firstNonDoneIndex === -1 ? STAGES.length : firstNonDoneIndex
+  const filledGaps = Math.max(0, Math.min(leadingDone - 1, gapCount))
+
   return (
     <div className="bg-ink text-ink-text pt-7 pb-8">
       <div className="max-w-[1180px] mx-auto px-8">
@@ -48,7 +56,7 @@ export default function StageTracker() {
             <h1 className="font-display text-2xl text-balance">Your career analysis</h1>
           </div>
           <span className="text-[0.82rem] text-ink-text-dim font-mono">
-            stage {Math.min(doneCount + 1, 7)} of 7
+            {doneCount} of {STAGES.length} complete
           </span>
         </div>
 
@@ -56,7 +64,7 @@ export default function StageTracker() {
           <div className="absolute left-[18px] right-[18px] top-[18px] h-px bg-ink-line" />
           <div
             className="absolute left-[18px] top-[18px] h-px bg-brass"
-            style={{ width: `calc(${doneCount}/6 * (100% - 36px))` }}
+            style={{ width: `calc(${filledGaps}/${gapCount} * (100% - 36px))` }}
           />
           {STAGES.map((stage, i) => {
             const status = statuses[stage.key]

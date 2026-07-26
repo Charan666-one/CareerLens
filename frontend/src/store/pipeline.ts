@@ -187,13 +187,19 @@ export const usePipelineStore = create<PipelineState>()(
       },
       merge: (persisted, current) => {
         const merged = { ...current }
-        const persistedRecord = (persisted ?? {}) as Record<string, { data?: unknown } | undefined>
+        const persistedRecord = (persisted ?? {}) as Record<string, unknown>
         for (const key of STAGE_KEYS) {
-          const data = persistedRecord[key]?.data
+          const data = (persistedRecord[key] as { data?: unknown } | undefined)?.data
           if (data !== undefined && data !== null) {
             ;(merged as any)[key] = { data, status: "success", error: null }
           }
         }
+        // partialize persists this too, but it isn't a STAGE_KEY, so without
+        // restoring it here it always came back null - leaving the skill-gap
+        // heading naming a role while the picker rendered blank (no <option>
+        // matches "").
+        const role = persistedRecord.selectedTargetRole
+        if (typeof role === "string") merged.selectedTargetRole = role
         return merged
       },
     }

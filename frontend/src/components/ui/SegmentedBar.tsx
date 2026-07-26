@@ -15,7 +15,13 @@ export default function SegmentedBar({ segments }: SegmentedBarProps) {
   return (
     <div className="h-1.5 rounded-full overflow-hidden flex bg-stone-line">
       {segments.map((seg, i) => (
-        <span key={i} className={`block h-full ${seg.colorClass}`} style={{ width: `${seg.fraction * 100}%` }} />
+        <span
+          key={i}
+          className={`block h-full ${seg.colorClass}`}
+          // NaN would yield width:"NaN%" - invalid CSS, dropped, so the
+          // segment would stretch to fill the bar instead of collapsing.
+          style={{ width: `${Number.isFinite(seg.fraction) ? Math.max(0, Math.min(1, seg.fraction)) * 100 : 0}%` }}
+        />
       ))}
     </div>
   )

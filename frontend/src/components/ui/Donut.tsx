@@ -17,14 +17,18 @@ interface DonutProps {
 export default function Donut({ segments, centerValue, centerLabel, size = 118 }: DonutProps) {
   let cursor = 0
   const stops = segments
+    // A NaN fraction poisons every stop after it ("NaNdeg"), and an empty
+    // segment list produces "conic-gradient(, ...)" - both are CSS syntax
+    // errors that drop the whole background and render an invisible ring.
+    .filter((seg) => Number.isFinite(seg.fraction))
     .map((seg) => {
       const start = cursor * 360
-      cursor += seg.fraction
+      cursor += Math.max(0, Math.min(1, seg.fraction))
       const end = cursor * 360
       return `${seg.colorVar} ${start}deg ${end}deg`
     })
-    .join(", ")
-  const gradient = `conic-gradient(${stops}, var(--stone-line) ${cursor * 360}deg 360deg)`
+  const remainder = `var(--stone-line) ${cursor * 360}deg 360deg`
+  const gradient = `conic-gradient(${[...stops, remainder].join(", ")})`
 
   return (
     <div

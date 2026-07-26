@@ -35,6 +35,7 @@ from app.services.nlp.resume_parser import ResumeParseError, extract_text
 from app.services.nlp.skill_normalizer import build_skill_lookup, extract_skills
 from app.services.pipeline.state import (
     get_or_create_state,
+    invalidate_downstream,
     require_all,
     require_role_in_suitability,
     require_stage,
@@ -108,6 +109,7 @@ async def run_profile_stage(
     now = datetime.now(timezone.utc)
     state.profile = profile_data
     state.profile_updated_at = now
+    invalidate_downstream(state, "profile")
     # Kept for later stages (suitability, skill_gap) that need the raw
     # text for TF-IDF textual similarity - the profile JSON above only
     # stores the derived summary, not the source text.
@@ -130,6 +132,7 @@ def run_strengths_stage(
     now = datetime.now(timezone.utc)
     state.strengths = result
     state.strengths_updated_at = now
+    invalidate_downstream(state, "strengths")
     db.commit()
 
     return StrengthsStageResponse(**result, updated_at=now)
@@ -162,6 +165,7 @@ def run_suitability_stage(
     now = datetime.now(timezone.utc)
     state.suitability = result
     state.suitability_updated_at = now
+    invalidate_downstream(state, "suitability")
     db.commit()
 
     return SuitabilityStageResponse(**result, updated_at=now)
@@ -200,6 +204,7 @@ def run_skill_gap_stage(
     now = datetime.now(timezone.utc)
     state.skill_gap = result
     state.skill_gap_updated_at = now
+    invalidate_downstream(state, "skill_gap")
     db.commit()
 
     return SkillGapStageResponse(**result, updated_at=now)
@@ -219,6 +224,7 @@ def run_roadmap_stage(
     now = datetime.now(timezone.utc)
     state.roadmap = result
     state.roadmap_updated_at = now
+    invalidate_downstream(state, "roadmap")
     db.commit()
 
     return RoadmapStageResponse(**result, updated_at=now)
@@ -237,6 +243,7 @@ async def run_resume_score_stage(
     now = datetime.now(timezone.utc)
     state.resume_score = result
     state.resume_score_updated_at = now
+    invalidate_downstream(state, "resume_score")
     db.commit()
 
     return ResumeScoreStageResponse(**result, updated_at=now)

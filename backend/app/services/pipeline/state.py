@@ -54,6 +54,48 @@ def require_all(state: AnalysisState, columns: list[tuple[str, str]]) -> None:
         )
 
 
+# Which stages become meaningless when a given stage is (re)run. Mirrors
+# the prerequisite graph enforced above, transitively closed: profile feeds
+# strengths+suitability, suitability feeds skill_gap, skill_gap feeds
+# roadmap, and recommendations consumes all six. resume_score is
+# independent of the main chain, so nothing upstream invalidates it - but
+# it does feed recommendations.
+_DOWNSTREAM_OF: dict[str, tuple[str, ...]] = {
+    "profile": ("strengths", "suitability", "skill_gap", "roadmap", "recommendations"),
+    "strengths": ("recommendations",),
+    "suitability": ("skill_gap", "roadmap", "recommendations"),
+    "skill_gap": ("roadmap", "recommendations"),
+    "roadmap": ("recommendations",),
+    "resume_score": ("recommendations",),
+    "recommendations": (),
+}
+
+
+def invalidate_downstream(state: AnalysisState, column: str) -> list[str]:
+    """
+    Clear every stage that was derived from `column`, because re-running it
+    just invalidated their inputs.
+
+    Without this, re-running suitability with a different target_roles list
+    leaves skill_gap/roadmap holding results for a role that is no longer
+    scored. require_all only checks the columns are non-null, so
+    /recommendations would then happily combine a fresh suitability set with
+    a stale roadmap and emit silently wrong explanations. Same for
+    re-uploading a different resume via /profile: everything downstream
+    still describes the previous resume's skills.
+
+    Returns the stage names cleared, so the caller can tell the client what
+    it now needs to re-run.
+    """
+    cleared = []
+    for downstream in _DOWNSTREAM_OF.get(column, ()):
+        if getattr(state, downstream) is not None:
+            setattr(state, downstream, None)
+            setattr(state, f"{downstream}_updated_at", None)
+            cleared.append(downstream)
+    return cleared
+
+
 def require_role_in_suitability(state: AnalysisState, target_role: str) -> None:
     require_stage(state, "suitability", "suitability")
 

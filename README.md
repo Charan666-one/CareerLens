@@ -4,12 +4,12 @@
 
 ## Executive Summary
 
-CareerLens is an early-stage web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. The current repository contains a working backend foundation for authentication, resume upload, skill extraction, job scoring, and roadmap generation, while the frontend is still in an early UI shell stage. The project is best described as an Alpha/MVP foundation rather than a production-ready product.
+CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register, log in, upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite; what remains is a live public deployment.
 
-- Current Status: 🟨 Active Development
-- Estimated Completion: ~65%
+- Current Status: 🟩 Feature Complete (pending public deployment)
+- Estimated Completion: ~90%
 - Target: MVP foundation
-- Last Verified: 2026-07-11
+- Last Verified: 2026-07-27
 
 ---
 
@@ -99,20 +99,20 @@ careerlens/
 
 ## Development Progress Dashboard
 
-Overall Progress: ████████████░░░░░░░░ 65%
+Overall Progress: ██████████████████░░ 90%
 
 | Area | Status | Notes |
 |---|---|---|
 | Planning | ✅ Complete | Core product scope is defined. |
 | Architecture | ✅ Complete | Backend/frontend split and domain modules are in place. |
-| Backend | 🟨 In Progress (75%) | Core routes and services exist; some modules are still simple. |
-| Frontend | 🟩 Mostly Complete (40%) | Pages exist as shells; no full UI flows yet. |
+| Backend | ✅ Complete | 7-stage stateful pipeline with an explainable hybrid scorer. |
+| Frontend | ✅ Complete | All pages wired to the pipeline API with progressive rendering. |
 | Authentication | ✅ Complete | Register/login/me endpoints and JWT helpers are implemented. |
 | Database | ✅ Complete | ORM models and Alembic migration structure exist. |
-| API | 🟨 In Progress | Core endpoints are implemented; jobs/users routes are still stubs. |
-| Testing | 🟥 Minimal | No meaningful automated tests are present yet. |
-| Deployment | 🟥 Not Started | Docker compose exists, but production deployment is not configured. |
-| Documentation | 🟨 In Progress | Architecture notes exist, but README needed consolidation. |
+| API | ✅ Complete | All 7 pipeline stages plus auth; jobs/users remain unused stubs. |
+| Testing | ✅ Complete | 101 tests: unit coverage per stage plus route integration tests. |
+| Deployment | 🟨 Configured, not yet live | Production Dockerfiles and Caddy SPA serving are in place; the Railway project has not been created yet. |
+| Documentation | ✅ Complete | README, CLAUDE.md, and docs/ reflect the current implementation. |
 
 ---
 
@@ -122,8 +122,8 @@ Overall Progress: ████████████░░░░░░░░ 6
 - ✅ Milestone 2 — Backend API skeleton and database models
 - ✅ Milestone 3 — Authentication, JWT, and resume upload flow
 - ✅ Milestone 4 — Basic skill matching and job recommendation engine
-- 🟨 Milestone 5 — Frontend integration and richer dashboard experience
-- ⬜ Milestone 6 — Production readiness, CI/CD, and deployment
+- ✅ Milestone 5 — Frontend integration and richer dashboard experience
+- 🟨 Milestone 6 — Production readiness and deployment (config done; not yet deployed)
 
 ---
 
@@ -135,13 +135,13 @@ Overall Progress: ████████████░░░░░░░░ 6
 | User Login | ✅ | 100% | JWT issuance and validation are implemented. |
 | Resume Upload | ✅ | 100% | PDF/DOCX/TXT supported; text extraction and skill matching work. |
 | Skill Extraction | ✅ | 90% | Keyword/regex matching is implemented and seeded. |
-| Job Recommendations | ✅ | 85% | Basic overlap + demand scoring is implemented. |
-| Roadmap Generation | ✅ | 80% | Missing-skill ranking is implemented. |
-| Dashboard UI | 🟨 | 30% | Page exists, but content is placeholder-only. |
-| Jobs UI | 🟨 | 20% | Page exists, but no real data loading. |
-| Roadmap UI | 🟨 | 20% | Page exists, but no real data loading. |
-| Testing | 🟥 | 10% | Test suite is effectively empty. |
-| Deployment Automation | 🟥 | 0% | No CI/CD or production deployment configuration. |
+| Job Recommendations | ✅ | 100% | Explainable hybrid scorer (text + graph + demand), eligibility-aware. |
+| Roadmap Generation | ✅ | 100% | Prerequisite-ordered sequencing with cumulative time estimates. |
+| Dashboard UI | ✅ | 100% | Drives all 7 stages with progressive reveal and a stage tracker. |
+| Jobs UI | ✅ | 100% | Eligibility-aware recommendation cards with named skill gaps. |
+| Roadmap UI | ✅ | 100% | Sequenced learning path with cumulative weeks. |
+| Testing | ✅ | 100% | 101 tests covering every stage, route, and prerequisite violation. |
+| Deployment Automation | 🟨 | 70% | Production Dockerfiles + compose ready; no CI/CD or live deploy yet. |
 
 ---
 

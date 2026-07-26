@@ -171,6 +171,38 @@ def test_profile_route_oversized_file_returns_413(client, test_user, auth_header
     assert response.status_code == 413
 
 
+# A supported extension whose bytes don't actually parse (truncated PDF,
+# .doc renamed to .docx, an HTML error page saved as a resume) used to
+# escape as an unhandled fitz/zipfile exception -> 500. It's a bad upload,
+# so it has to be a 400.
+def test_profile_route_corrupt_pdf_returns_400(client, test_user, auth_headers):
+    response = _upload(
+        client, PROFILE_URL, auth_headers,
+        b"This is plain text, not a PDF at all.",
+        filename="resume.pdf", content_type="application/pdf",
+    )
+    assert response.status_code == 400
+
+
+def test_profile_route_corrupt_docx_returns_400(client, test_user, auth_headers):
+    response = _upload(
+        client, PROFILE_URL, auth_headers,
+        b"This is plain text, not a zip/docx.",
+        filename="resume.docx",
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
+    assert response.status_code == 400
+
+
+def test_resume_score_route_corrupt_pdf_returns_400(client, test_user, auth_headers):
+    response = _upload(
+        client, RESUME_SCORE_URL, auth_headers,
+        b"%PDF-1.4 truncated garbage",
+        filename="resume.pdf", content_type="application/pdf",
+    )
+    assert response.status_code == 400
+
+
 # --------------------------------------------------------------------
 # skill-gap target_role must have been scored in suitability
 # --------------------------------------------------------------------

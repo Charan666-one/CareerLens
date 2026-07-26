@@ -31,7 +31,7 @@ from app.services.graph.skill_graph import (
     TEXT_WEIGHT as SKILL_GAP_TEXT_WEIGHT,
     weighted_skill_gap,
 )
-from app.services.nlp.resume_parser import UnsupportedFileTypeError, extract_text
+from app.services.nlp.resume_parser import ResumeParseError, extract_text
 from app.services.nlp.skill_normalizer import build_skill_lookup, extract_skills
 from app.services.pipeline.state import (
     get_or_create_state,
@@ -67,7 +67,10 @@ async def _extract_uploaded_text(file: UploadFile) -> str:
 
     try:
         raw_text = extract_text(file.filename or "", file_bytes)
-    except UnsupportedFileTypeError as exc:
+    except ResumeParseError as exc:
+        # Covers both an unknown extension and a supported extension whose
+        # bytes don't parse - a bad upload is the user's problem to fix, so
+        # it must be a 400, not an unhandled 500.
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
 
     if not raw_text:

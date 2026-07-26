@@ -5,7 +5,7 @@ from app.core.deps import get_current_user
 from app.db.database import get_db
 from app.db.models import CandidateProfile, User
 from app.schemas.resume import ResumeParseResponse
-from app.services.nlp.resume_parser import UnsupportedFileTypeError, extract_text
+from app.services.nlp.resume_parser import ResumeParseError, extract_text
 from app.services.nlp.skill_normalizer import build_skill_lookup, extract_skills
 
 router = APIRouter()
@@ -29,7 +29,7 @@ async def upload_resume(
 
     try:
         raw_text = extract_text(file.filename or "", file_bytes)
-    except UnsupportedFileTypeError as exc:
+    except ResumeParseError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
 
     if not raw_text:

@@ -24,6 +24,13 @@ function idleSlice<T>(): StageSlice<T> {
   return { data: null, status: "idle", error: null }
 }
 
+// Bumped by reset() (called on logout and on a 401). A stage run captures
+// the epoch when it starts; if reset() happens while a request is in flight,
+// the epoch no longer matches when the response lands, so the completion is
+// dropped instead of writing one user's data into the next user's freshly
+// reset (and persisted) store.
+let sessionEpoch = 0
+
 const STAGE_KEYS = [
   "profile",
   "strengths",
@@ -76,12 +83,20 @@ export const usePipelineStore = create<PipelineState>()(
         onSuccess?: (data: T) => void | Promise<void>
       ) {
         return async (...args: A) => {
+          const startedAt = sessionEpoch
+          const isCurrent = () => sessionEpoch === startedAt
           set((s) => ({ [key]: { ...s[key], status: "loading", error: null } }) as any)
           try {
             const data = await call(...args)
+            // A logout/401 between the request and its response invalidates
+            // this write - dropping it keeps a stale response from
+            // repopulating (and re-persisting) a store that was just reset
+            // for a different session.
+            if (!isCurrent()) return
             set(() => ({ [key]: { data, status: "success", error: null } }) as any)
             await onSuccess?.(data)
           } catch (err) {
+            if (!isCurrent()) return
             const error = normalizeApiError(err)
             set((s) => ({ [key]: { ...s[key], status: "error", error } }) as any)
           }
@@ -164,7 +179,11 @@ export const usePipelineStore = create<PipelineState>()(
           }
         },
 
-        reset: () =>
+        reset: () => {
+          // Invalidate any in-flight stage runs before wiping state, so
+          // their responses can't land afterwards and re-persist this
+          // session's data for whoever logs in next on this tab.
+          sessionEpoch += 1
           set({
             profile: idleSlice(),
             strengths: idleSlice(),
@@ -174,7 +193,11 @@ export const usePipelineStore = create<PipelineState>()(
             resumeScore: idleSlice(),
             recommendations: idleSlice(),
             selectedTargetRole: null,
-          }),
+          })
+          // Setting idle above already re-persists an empty snapshot, but
+          // clear the key outright so nothing lingers even momentarily.
+          usePipelineStore.persist.clearStorage()
+        },
       }
     },
     {

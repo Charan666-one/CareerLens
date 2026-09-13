@@ -15,8 +15,13 @@ setting every required var explicitly sidesteps that entirely).
 """
 import os
 
+# Default matches docker-compose's postgres service (postgres/password),
+# so `docker compose up -d postgres` + `createdb careerlens_test` is enough
+# to run the suite on a clean checkout. Set TEST_DATABASE_URL to point
+# somewhere else (a local socket, a CI service container, etc.).
 os.environ["DATABASE_URL"] = os.environ.get(
-    "TEST_DATABASE_URL", "postgresql://srisaicharanp@localhost:5432/careerlens_test"
+    "TEST_DATABASE_URL",
+    "postgresql://postgres:password@localhost:5432/careerlens_test",
 )
 os.environ.setdefault("SECRET_KEY", "test-secret-key-not-for-production")
 os.environ.setdefault("ALGORITHM", "HS256")

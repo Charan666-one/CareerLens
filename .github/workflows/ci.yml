@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend tests
+    runs-on: ubuntu-latest
+
+    # The suite runs against a real Postgres rather than mocks (see
+    # backend/tests/conftest.py for why), and applies the Alembic
+    # migrations itself, so this only has to provide an empty database.
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: careerlens_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d careerlens_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:password@localhost:5432/careerlens_test
+        run: pytest -q
+
+      # Guards the failure mode where the API boots healthy but serves an
+      # empty knowledge base: proves migrate-then-seed (what the backend
+      # image runs on boot) actually populates skills/jobs/edges, and that
+      # seeding twice is idempotent.
+      - name: Verify migrate + seed produces a populated knowledge base
+        env:
+          DATABASE_URL: postgresql://postgres:password@localhost:5432/careerlens_seedcheck
+          SECRET_KEY: ci-only-not-a-real-secret
+          PGPASSWORD: password
+        run: |
+          psql -h localhost -U postgres -c 'CREATE DATABASE careerlens_seedcheck;'
+          alembic upgrade head
+          python -m app.db.seed
+          python -m app.db.seed   # upserts, so the second run must be a no-op
+          python - <<'PY'
+          from app.db.database import SessionLocal
+          from app.db.models import Job, Skill, SkillEdge
+
+          db = SessionLocal()
+          counts = {m.__name__: db.query(m).count() for m in (Skill, SkillEdge, Job)}
+          print(counts)
+          assert all(counts.values()), f"seed left a table empty: {counts}"
+          PY
+
+  frontend:
+    name: Frontend build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci
+
+      # `npm run build` is `tsc && vite build`, so this typechecks too -
+      # there is no separate lint/test script in package.json.
+      - run: npm run build

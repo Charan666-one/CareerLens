@@ -9,9 +9,9 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    # The backend runs `alembic upgrade head` on boot, so it has to wait
-    # for Postgres to actually accept connections, not just for the
-    # container to exist.
+    # The backend runs `alembic upgrade head && python -m app.db.seed` on
+    # boot, so it has to wait for Postgres to actually accept connections,
+    # not just for the container to exist.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d careerlens"]
       interval: 3s

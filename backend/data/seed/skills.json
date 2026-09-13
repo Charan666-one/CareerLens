@@ -75,6 +75,17 @@
     "avg_learn_weeks": 8
   },
   {
+    "name": "javascript",
+    "aliases": [
+      "JavaScript",
+      "JS",
+      "ECMAScript"
+    ],
+    "category": "frontend",
+    "market_demand": 0.88,
+    "avg_learn_weeks": 5
+  },
+  {
     "name": "react",
     "aliases": [
       "React"

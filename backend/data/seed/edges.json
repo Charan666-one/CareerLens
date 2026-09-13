@@ -1,1 +1,404 @@
-[{"parent":"python","child":"numpy","relation":"prerequisite","weight":1.0},{"parent":"numpy","child":"pandas","relation":"prerequisite","weight":1.0},{"parent":"pandas","child":"scikit-learn","relation":"prerequisite","weight":1.0},{"parent":"python","child":"fastapi","relation":"prerequisite","weight":1.0},{"parent":"fastapi","child":"docker","relation":"enables","weight":0.8},{"parent":"docker","child":"aws","relation":"prerequisite","weight":0.9},{"parent":"javascript","child":"react","relation":"prerequisite","weight":1.0},{"parent":"react","child":"typescript","relation":"enables","weight":0.7}]
+[
+  {
+    "parent": "python",
+    "child": "numpy",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "numpy",
+    "child": "pandas",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "pandas",
+    "child": "scikit-learn",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "python",
+    "child": "fastapi",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "fastapi",
+    "child": "docker",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "docker",
+    "child": "aws",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "javascript",
+    "child": "react",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "react",
+    "child": "typescript",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "python",
+    "child": "django",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "python",
+    "child": "flask",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "flask",
+    "child": "fastapi",
+    "relation": "enables",
+    "weight": 0.6
+  },
+  {
+    "parent": "java",
+    "child": "spring-boot",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "javascript",
+    "child": "nodejs",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "nodejs",
+    "child": "expressjs",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "sql",
+    "child": "postgresql",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "sql",
+    "child": "mysql",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "rest-api",
+    "child": "graphql",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "fastapi",
+    "child": "rest-api",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "expressjs",
+    "child": "rest-api",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "spring-boot",
+    "child": "rest-api",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "rest-api",
+    "child": "microservices",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "microservices",
+    "child": "kafka",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "postgresql",
+    "child": "redis",
+    "relation": "enables",
+    "weight": 0.5
+  },
+  {
+    "parent": "mongodb",
+    "child": "redis",
+    "relation": "enables",
+    "weight": 0.4
+  },
+  {
+    "parent": "golang",
+    "child": "microservices",
+    "relation": "enables",
+    "weight": 0.6
+  },
+  {
+    "parent": "html",
+    "child": "css",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "css",
+    "child": "responsive-design",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "css",
+    "child": "tailwind-css",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "html",
+    "child": "javascript",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "javascript",
+    "child": "vue",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "react",
+    "child": "redux",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "react",
+    "child": "nextjs",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "python",
+    "child": "data-analysis",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "pandas",
+    "child": "data-analysis",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "pandas",
+    "child": "matplotlib",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "statistics",
+    "child": "machine-learning",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "scikit-learn",
+    "child": "machine-learning",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "machine-learning",
+    "child": "deep-learning",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "deep-learning",
+    "child": "pytorch",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "deep-learning",
+    "child": "tensorflow",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "deep-learning",
+    "child": "nlp",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "deep-learning",
+    "child": "computer-vision",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "data-analysis",
+    "child": "power-bi",
+    "relation": "enables",
+    "weight": 0.6
+  },
+  {
+    "parent": "linux",
+    "child": "bash",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "linux",
+    "child": "docker",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "git",
+    "child": "ci-cd",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "ci-cd",
+    "child": "github-actions",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "docker",
+    "child": "kubernetes",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "kubernetes",
+    "child": "terraform",
+    "relation": "enables",
+    "weight": 0.5
+  },
+  {
+    "parent": "aws",
+    "child": "terraform",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "docker",
+    "child": "azure",
+    "relation": "enables",
+    "weight": 0.5
+  },
+  {
+    "parent": "docker",
+    "child": "gcp",
+    "relation": "enables",
+    "weight": 0.5
+  },
+  {
+    "parent": "linux",
+    "child": "nginx",
+    "relation": "prerequisite",
+    "weight": 0.8
+  },
+  {
+    "parent": "verilog",
+    "child": "systemverilog",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "verilog",
+    "child": "fpga",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "vhdl",
+    "child": "fpga",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "systemverilog",
+    "child": "vlsi",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "embedded-c",
+    "child": "rtos",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "embedded-c",
+    "child": "i2c-spi",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "arm-microcontrollers",
+    "child": "rtos",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "i2c-spi",
+    "child": "can-protocol",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "matlab",
+    "child": "simulink",
+    "relation": "prerequisite",
+    "weight": 1.0
+  },
+  {
+    "parent": "matlab",
+    "child": "signal-processing",
+    "relation": "enables",
+    "weight": 0.8
+  },
+  {
+    "parent": "analog-circuit-design",
+    "child": "pcb-design",
+    "relation": "enables",
+    "weight": 0.7
+  },
+  {
+    "parent": "analog-circuit-design",
+    "child": "power-electronics",
+    "relation": "prerequisite",
+    "weight": 0.9
+  },
+  {
+    "parent": "embedded-c",
+    "child": "plc",
+    "relation": "enables",
+    "weight": 0.5
+  },
+  {
+    "parent": "autocad-electrical",
+    "child": "pcb-design",
+    "relation": "enables",
+    "weight": 0.5
+  }
+]

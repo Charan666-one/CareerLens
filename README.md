@@ -49,7 +49,7 @@ The current implementation is intentionally lightweight and rule-based rather th
 | NLP | spaCy, PyMuPDF, python-docx |
 | ML / Graph | scikit-learn, numpy, pandas, networkx |
 | Frontend | React, TypeScript, Vite, Tailwind CSS, React Router, Zustand, Axios |
-| Data | JSON seed files for skills, edges, and jobs |
+| Data | JSON seed files: 71 skills, 67 prerequisite edges, 30 jobs |
 | DevOps | Docker, Docker Compose, Caddy, GitHub Actions |
 
 ---
@@ -82,7 +82,7 @@ careerlens/
 │   │   └── services/          # NLP, graph, recommendation, roadmap
 │   ├── alembic/               # database migrations
 │   ├── data/seed/             # seed JSON files
-│   ├── tests/                 # 109 backend tests (pytest, real Postgres)
+│   ├── tests/                 # 117 backend tests (pytest, real Postgres)
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -111,7 +111,7 @@ Overall Progress: ██████████████████░░ 9
 | Authentication | ✅ Complete | Register/login/me endpoints and JWT helpers are implemented. |
 | Database | ✅ Complete | ORM models and Alembic migration structure exist. |
 | API | ✅ Complete | All 7 pipeline stages plus auth; jobs/users remain unused stubs. |
-| Testing | ✅ Complete | 109 tests: unit coverage per stage, route integration tests, and deployment probes. |
+| Testing | ✅ Complete | 117 tests: unit coverage per stage, route integration tests, deployment probes, and seed-data integrity. |
 | Deployment | 🟨 Configured, not yet live | Production Dockerfiles, migrate-and-seed on boot, Caddy SPA serving, and CI are in place; no live public URL yet. |
 | Documentation | ✅ Complete | README, CLAUDE.md, and docs/ reflect the current implementation. |
 
@@ -135,13 +135,13 @@ Overall Progress: ██████████████████░░ 9
 | User Registration | ✅ | 100% | Backend endpoint exists and hashes passwords. |
 | User Login | ✅ | 100% | JWT issuance and validation are implemented. |
 | Resume Upload | ✅ | 100% | PDF/DOCX/TXT supported; text extraction and skill matching work. |
-| Skill Extraction | ✅ | 90% | Keyword/regex matching is implemented and seeded. |
+| Skill Extraction | ✅ | 90% | Keyword/alias matching against a 71-skill seeded knowledge base. |
 | Job Recommendations | ✅ | 100% | Explainable hybrid scorer (text + graph + demand), eligibility-aware. |
 | Roadmap Generation | ✅ | 100% | Prerequisite-ordered sequencing with cumulative time estimates. |
 | Dashboard UI | ✅ | 100% | Drives all 7 stages with progressive reveal and a stage tracker. |
 | Jobs UI | ✅ | 100% | Eligibility-aware recommendation cards with named skill gaps. |
 | Roadmap UI | ✅ | 100% | Sequenced learning path with cumulative weeks. |
-| Testing | ✅ | 100% | 109 tests covering every stage, route, prerequisite violation, and the health probe. |
+| Testing | ✅ | 100% | 117 tests covering every stage, route, prerequisite violation, the health probe, and seed integrity. |
 | Deployment Automation | 🟨 | 90% | Production Dockerfiles, compose, and CI on every push; no live deploy yet. |
 
 ---
@@ -382,8 +382,9 @@ Current test coverage is minimal. The repository contains a placeholder test fil
 ## Known Bugs and Technical Debt
 
 - The jobs and users routes are still empty stubs, mounted in `main.py` but exposing no endpoints
-- The seed knowledge base is demo-scale (21 skills, 8 jobs, 8 edges); a resume whose skills fall outside
-  that set will score sparsely, so growing the dataset is the highest-value next change
+- The seed knowledge base covers 71 skills, 30 jobs, and 67 prerequisite edges across backend,
+  frontend, ML, DevOps, and EEE/ECE. It is curated rather than sourced from live market data, so
+  demand figures are estimates and roles outside these five domains still score sparsely
 - Skill extraction is keyword/alias regex matching rather than semantic NLP
 - Access tokens expire after 30 minutes with no refresh flow, so long sessions end in a forced re-login
 - The interactive API docs at `/docs` are publicly reachable wherever the backend is deployed
@@ -396,7 +397,7 @@ Current test coverage is minimal. The repository contains a placeholder test fil
 No explicit TODO/FIXME comments were found in the core implementation. However, the project still contains several obvious incomplete areas:
 
 - Flesh out or remove the jobs and users API modules
-- Expand the seed knowledge base well beyond the current 21 skills / 8 jobs
+- Source market demand from real job-posting data instead of curated estimates
 - Replace rule-based matching with richer NLP and graph logic
 - Add a token refresh flow so sessions outlive the 30-minute access token
 - Add monitoring and observability
@@ -445,10 +446,10 @@ The repository is structured well for a growing product:
 
 ## Current Development Snapshot
 
-- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 109 tests plus CI cover the backend.
+- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 117 tests plus CI cover the backend.
 - What was the last major thing completed? Production deployment configuration — migrate-and-seed on boot, a non-root backend image, and a CI workflow running the suite and the frontend build on every push.
-- What should I work on next? Deploy to a live public URL, then expand the seed knowledge base.
-- What blockers exist? None blocking a deploy. The main product limitation is the demo-scale seed dataset.
+- What should I work on next? Deploy to a live public URL.
+- What blockers exist? None blocking a deploy. The main product limitation is that market-demand figures are curated estimates rather than live data.
 - How close is the project to MVP? At it, pending a live deployment.
 - How close is it to Production? Deployable now. Hardening beyond that (token refresh, monitoring, multi-replica support) is still outstanding.
 

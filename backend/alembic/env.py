@@ -24,8 +24,14 @@ config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
+#
+# disable_existing_loggers defaults to True, which silently switches off
+# every logger created before this runs - including the app's own
+# "careerlens" logger whenever migrations are driven in-process (the test
+# suite does exactly that in conftest's apply_migrations fixture). Keep
+# existing loggers alive; this only ever adds Alembic's own handlers.
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 # add your model's MetaData object here
 # for 'autogenerate' support

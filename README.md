@@ -4,7 +4,7 @@
 
 ## Executive Summary
 
-CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register, log in, upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite; what remains is a live public deployment.
+CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register, log in, upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite running in CI; what remains is a live public deployment.
 
 - Current Status: 🟩 Feature Complete (pending public deployment)
 - Estimated Completion: ~90%
@@ -82,7 +82,7 @@ careerlens/
 │   │   └── services/          # NLP, graph, recommendation, roadmap
 │   ├── alembic/               # database migrations
 │   ├── data/seed/             # seed JSON files
-│   ├── tests/                 # 101 backend tests (pytest, real Postgres)
+│   ├── tests/                 # 109 backend tests (pytest, real Postgres)
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -111,7 +111,7 @@ Overall Progress: ██████████████████░░ 9
 | Authentication | ✅ Complete | Register/login/me endpoints and JWT helpers are implemented. |
 | Database | ✅ Complete | ORM models and Alembic migration structure exist. |
 | API | ✅ Complete | All 7 pipeline stages plus auth; jobs/users remain unused stubs. |
-| Testing | ✅ Complete | 101 tests: unit coverage per stage plus route integration tests. |
+| Testing | ✅ Complete | 109 tests: unit coverage per stage, route integration tests, and deployment probes. |
 | Deployment | 🟨 Configured, not yet live | Production Dockerfiles, migrate-and-seed on boot, Caddy SPA serving, and CI are in place; no live public URL yet. |
 | Documentation | ✅ Complete | README, CLAUDE.md, and docs/ reflect the current implementation. |
 
@@ -141,7 +141,7 @@ Overall Progress: ██████████████████░░ 9
 | Dashboard UI | ✅ | 100% | Drives all 7 stages with progressive reveal and a stage tracker. |
 | Jobs UI | ✅ | 100% | Eligibility-aware recommendation cards with named skill gaps. |
 | Roadmap UI | ✅ | 100% | Sequenced learning path with cumulative weeks. |
-| Testing | ✅ | 100% | 101 tests covering every stage, route, and prerequisite violation. |
+| Testing | ✅ | 100% | 109 tests covering every stage, route, prerequisite violation, and the health probe. |
 | Deployment Automation | 🟨 | 90% | Production Dockerfiles, compose, and CI on every push; no live deploy yet. |
 
 ---
@@ -333,12 +333,19 @@ Postgres.
 | `DATABASE_URL` | Connection string for the managed Postgres instance |
 | `SECRET_KEY` | Long random string — generate with `openssl rand -hex 32` |
 | `CORS_ORIGINS` | The deployed frontend URL (e.g. `https://careerlens.up.railway.app`) |
+| `ENVIRONMENT` | `production` — makes the app flag a forgotten localhost `CORS_ORIGINS` at boot |
 
 `PORT` is injected by the platform; the image falls back to 8000 when it isn't set. On boot the
 container runs `alembic upgrade head && python -m app.db.seed`. **The seed step is required** —
 migrations create the `skills`/`jobs`/`skill_edges` tables but leave them empty, and an empty knowledge
 base makes every pipeline stage return `200` with no results rather than failing visibly. Seeding is
 upsert-keyed, so re-running it on every redeploy is idempotent.
+
+The service exposes `GET /health`, which round-trips the database and returns `503` when Postgres is
+unreachable — point the platform's health check at it rather than at `/`, so a container that booted
+without a working database is not sent traffic. `backend/railway.json` and `frontend/railway.json`
+already declare the Dockerfile builder, health check, and restart policy, so on Railway you only need
+to set each service's root directory and its environment variables.
 
 Run the backend at **a single replica**. Multiple replicas would race `alembic upgrade head` against
 the same database on boot.
@@ -438,7 +445,7 @@ The repository is structured well for a growing product:
 
 ## Current Development Snapshot
 
-- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 101 tests plus CI cover the backend.
+- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 109 tests plus CI cover the backend.
 - What was the last major thing completed? Production deployment configuration — migrate-and-seed on boot, a non-root backend image, and a CI workflow running the suite and the frontend build on every push.
 - What should I work on next? Deploy to a live public URL, then expand the seed knowledge base.
 - What blockers exist? None blocking a deploy. The main product limitation is the demo-scale seed dataset.

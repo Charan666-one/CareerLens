@@ -4,7 +4,7 @@
 
 ## Executive Summary
 
-CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register, log in, upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite; what remains is a live public deployment.
+CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register, log in, upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite running in CI; what remains is a live public deployment.
 
 - Current Status: 🟩 Feature Complete (pending public deployment)
 - Estimated Completion: ~90%
@@ -49,8 +49,8 @@ The current implementation is intentionally lightweight and rule-based rather th
 | NLP | spaCy, PyMuPDF, python-docx |
 | ML / Graph | scikit-learn, numpy, pandas, networkx |
 | Frontend | React, TypeScript, Vite, Tailwind CSS, React Router, Zustand, Axios |
-| Data | JSON seed files for skills, edges, and jobs |
-| DevOps | Docker Compose |
+| Data | JSON seed files: 71 skills, 67 prerequisite edges, 30 jobs |
+| DevOps | Docker, Docker Compose, Caddy, GitHub Actions |
 
 ---
 
@@ -82,7 +82,7 @@ careerlens/
 │   │   └── services/          # NLP, graph, recommendation, roadmap
 │   ├── alembic/               # database migrations
 │   ├── data/seed/             # seed JSON files
-│   ├── tests/                 # test suite skeleton
+│   ├── tests/                 # 117 backend tests (pytest, real Postgres)
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -91,6 +91,7 @@ careerlens/
 │   │   ├── store/             # auth state
 │   │   └── types/             # shared TS types
 ├── docs/                      # architecture and research notes
+├── .github/workflows/         # CI: backend tests + frontend build
 ├── docker-compose.yml         # local container orchestration
 └── .env.example               # environment configuration template
 ```
@@ -110,8 +111,8 @@ Overall Progress: ██████████████████░░ 9
 | Authentication | ✅ Complete | Register/login/me endpoints and JWT helpers are implemented. |
 | Database | ✅ Complete | ORM models and Alembic migration structure exist. |
 | API | ✅ Complete | All 7 pipeline stages plus auth; jobs/users remain unused stubs. |
-| Testing | ✅ Complete | 101 tests: unit coverage per stage plus route integration tests. |
-| Deployment | 🟨 Configured, not yet live | Production Dockerfiles and Caddy SPA serving are in place; the Railway project has not been created yet. |
+| Testing | ✅ Complete | 117 tests: unit coverage per stage, route integration tests, deployment probes, and seed-data integrity. |
+| Deployment | 🟨 Configured, not yet live | Production Dockerfiles, migrate-and-seed on boot, Caddy SPA serving, and CI are in place; no live public URL yet. |
 | Documentation | ✅ Complete | README, CLAUDE.md, and docs/ reflect the current implementation. |
 
 ---
@@ -134,14 +135,14 @@ Overall Progress: ██████████████████░░ 9
 | User Registration | ✅ | 100% | Backend endpoint exists and hashes passwords. |
 | User Login | ✅ | 100% | JWT issuance and validation are implemented. |
 | Resume Upload | ✅ | 100% | PDF/DOCX/TXT supported; text extraction and skill matching work. |
-| Skill Extraction | ✅ | 90% | Keyword/regex matching is implemented and seeded. |
+| Skill Extraction | ✅ | 90% | Keyword/alias matching against a 71-skill seeded knowledge base. |
 | Job Recommendations | ✅ | 100% | Explainable hybrid scorer (text + graph + demand), eligibility-aware. |
 | Roadmap Generation | ✅ | 100% | Prerequisite-ordered sequencing with cumulative time estimates. |
 | Dashboard UI | ✅ | 100% | Drives all 7 stages with progressive reveal and a stage tracker. |
 | Jobs UI | ✅ | 100% | Eligibility-aware recommendation cards with named skill gaps. |
 | Roadmap UI | ✅ | 100% | Sequenced learning path with cumulative weeks. |
-| Testing | ✅ | 100% | 101 tests covering every stage, route, and prerequisite violation. |
-| Deployment Automation | 🟨 | 70% | Production Dockerfiles + compose ready; no CI/CD or live deploy yet. |
+| Testing | ✅ | 100% | 117 tests covering every stage, route, prerequisite violation, the health probe, and seed integrity. |
+| Deployment Automation | 🟨 | 90% | Production Dockerfiles, compose, and CI on every push; no live deploy yet. |
 
 ---
 
@@ -171,11 +172,10 @@ Overall Progress: ██████████████████░░ 9
 
 The following areas are active or incomplete:
 
-- Frontend page implementation and real API integration
 - Jobs and users API route modules remain stubbed
-- Recommendation and roadmap logic are intentionally basic and not yet graph- or semantic-rich
-- End-to-end user flows from login to dashboard are not yet wired up
-- Test coverage is not yet established
+- The seed knowledge base is demo-scale and needs to grow well beyond 21 skills / 8 jobs
+- Skill extraction is regex/alias matching, not yet semantic
+- No live public deployment yet
 
 ---
 
@@ -320,9 +320,45 @@ npm run build
 docker compose up --build
 ```
 
+### Deploying
+
+The backend and frontend each ship a production Dockerfile, so any platform that builds from a
+Dockerfile (Railway, Fly, Render, a plain VM) can run them. Deploy them as two services plus a managed
+Postgres.
+
+**Backend service** — build context `backend/`. Set these environment variables:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Connection string for the managed Postgres instance |
+| `SECRET_KEY` | Long random string — generate with `openssl rand -hex 32` |
+| `CORS_ORIGINS` | The deployed frontend URL (e.g. `https://careerlens.up.railway.app`) |
+| `ENVIRONMENT` | `production` — makes the app flag a forgotten localhost `CORS_ORIGINS` at boot |
+
+`PORT` is injected by the platform; the image falls back to 8000 when it isn't set. On boot the
+container runs `alembic upgrade head && python -m app.db.seed`. **The seed step is required** —
+migrations create the `skills`/`jobs`/`skill_edges` tables but leave them empty, and an empty knowledge
+base makes every pipeline stage return `200` with no results rather than failing visibly. Seeding is
+upsert-keyed, so re-running it on every redeploy is idempotent.
+
+The service exposes `GET /health`, which round-trips the database and returns `503` when Postgres is
+unreachable — point the platform's health check at it rather than at `/`, so a container that booted
+without a working database is not sent traffic. `backend/railway.json` and `frontend/railway.json`
+already declare the Dockerfile builder, health check, and restart policy, so on Railway you only need
+to set each service's root directory and its environment variables.
+
+Run the backend at **a single replica**. Multiple replicas would race `alembic upgrade head` against
+the same database on boot.
+
+**Frontend service** — build context `frontend/`. Set `VITE_API_BASE_URL` to the deployed backend URL.
+Vite inlines `VITE_*` variables at *build* time, so this must be present as a build argument before
+`npm run build` runs; it cannot be changed on a running container. The built assets are served by Caddy,
+whose Caddyfile binds `:{$PORT}`.
+
 ### Deployment Status
 
-Deployment is not yet automated or production-ready. The current repository includes Docker Compose for local orchestration, but CI/CD, monitoring, and production environment configuration are still pending.
+Deployment configuration is complete and CI runs on every push. The application has not yet been
+deployed to a live public URL — that is the remaining step in Milestone 6.
 
 ---
 
@@ -345,12 +381,14 @@ Current test coverage is minimal. The repository contains a placeholder test fil
 
 ## Known Bugs and Technical Debt
 
-- The frontend pages are UI placeholders rather than complete user flows
-- The jobs and users routes are still empty stubs
-- Recommendation and roadmap logic are intentionally simple and do not yet use full graph reasoning or semantic similarity
-- The backend currently relies on seeded JSON data rather than a richer knowledge graph
-- No automated test suite or CI pipeline is in place
-- Production deployment configuration is not present
+- The jobs and users routes are still empty stubs, mounted in `main.py` but exposing no endpoints
+- The seed knowledge base covers 71 skills, 30 jobs, and 67 prerequisite edges across backend,
+  frontend, ML, DevOps, and EEE/ECE. It is curated rather than sourced from live market data, so
+  demand figures are estimates and roles outside these five domains still score sparsely
+- Skill extraction is keyword/alias regex matching rather than semantic NLP
+- Access tokens expire after 30 minutes with no refresh flow, so long sessions end in a forced re-login
+- The interactive API docs at `/docs` are publicly reachable wherever the backend is deployed
+- The backend must run at a single replica (concurrent replicas would race Alembic on boot)
 
 ---
 
@@ -358,11 +396,11 @@ Current test coverage is minimal. The repository contains a placeholder test fil
 
 No explicit TODO/FIXME comments were found in the core implementation. However, the project still contains several obvious incomplete areas:
 
-- Implement real frontend data wiring for dashboard, jobs, and roadmap screens
-- Flesh out the jobs and users API modules
+- Flesh out or remove the jobs and users API modules
+- Source market demand from real job-posting data instead of curated estimates
 - Replace rule-based matching with richer NLP and graph logic
-- Add tests and CI
-- Add deployment and monitoring configuration
+- Add a token refresh flow so sessions outlive the 30-minute access token
+- Add monitoring and observability
 
 ---
 
@@ -402,18 +440,18 @@ The repository is structured well for a growing product:
 ### Future
 - Add performance tuning and caching
 - Add monitoring and observability
-- Implement production deployment and CI/CD
+- Deploy to a live public URL
 
 ---
 
 ## Current Development Snapshot
 
-- Where am I right now? The project is in an Alpha/MVP foundation phase with working backend flows and early frontend scaffolding.
-- What was the last major thing completed? Resume upload, skill extraction, basic job recommendations, and roadmap generation were added.
-- What should I work on next? Finish the frontend integration and add automated tests.
-- What blockers exist? The UI is still mostly placeholder-based, and there are no meaningful tests or deployment pipelines yet.
-- How close is the project to MVP? Moderately close on backend fundamentals, but still incomplete on product experience and verification.
-- How close is it to Production? Not close yet; deployment and operational maturity are still missing.
+- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 117 tests plus CI cover the backend.
+- What was the last major thing completed? Production deployment configuration — migrate-and-seed on boot, a non-root backend image, and a CI workflow running the suite and the frontend build on every push.
+- What should I work on next? Deploy to a live public URL.
+- What blockers exist? None blocking a deploy. The main product limitation is that market-demand figures are curated estimates rather than live data.
+- How close is the project to MVP? At it, pending a live deployment.
+- How close is it to Production? Deployable now. Hardening beyond that (token refresh, monitoring, multi-replica support) is still outstanding.
 
 ---
 

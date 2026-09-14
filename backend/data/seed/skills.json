@@ -1,5 +1,129 @@
 [
   {
+    "name": "django",
+    "aliases": [
+      "Django"
+    ],
+    "category": "backend",
+    "market_demand": 0.7,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "expressjs",
+    "aliases": [
+      "Express.js",
+      "ExpressJS",
+      "Express framework"
+    ],
+    "category": "backend",
+    "market_demand": 0.66,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "fastapi",
+    "aliases": [
+      "FastAPI"
+    ],
+    "category": "backend",
+    "market_demand": 0.61,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "flask",
+    "aliases": [
+      "Flask"
+    ],
+    "category": "backend",
+    "market_demand": 0.64,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "golang",
+    "aliases": [
+      "Golang",
+      "Go programming"
+    ],
+    "category": "backend",
+    "market_demand": 0.72,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "graphql",
+    "aliases": [
+      "GraphQL"
+    ],
+    "category": "backend",
+    "market_demand": 0.58,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "java",
+    "aliases": [
+      "Java"
+    ],
+    "category": "backend",
+    "market_demand": 0.82,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "kafka",
+    "aliases": [
+      "Kafka",
+      "Apache Kafka"
+    ],
+    "category": "backend",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "microservices",
+    "aliases": [
+      "microservices",
+      "microservice"
+    ],
+    "category": "backend",
+    "market_demand": 0.72,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "mongodb",
+    "aliases": [
+      "MongoDB",
+      "Mongo"
+    ],
+    "category": "backend",
+    "market_demand": 0.64,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "mysql",
+    "aliases": [
+      "MySQL"
+    ],
+    "category": "backend",
+    "market_demand": 0.7,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "nodejs",
+    "aliases": [
+      "Node.js",
+      "NodeJS"
+    ],
+    "category": "backend",
+    "market_demand": 0.8,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "postgresql",
+    "aliases": [
+      "postgres"
+    ],
+    "category": "backend",
+    "market_demand": 0.7,
+    "avg_learn_weeks": 4
+  },
+  {
     "name": "python",
     "aliases": [
       "Python",
@@ -8,6 +132,501 @@
     "category": "backend",
     "market_demand": 0.92,
     "avg_learn_weeks": 6
+  },
+  {
+    "name": "redis",
+    "aliases": [
+      "Redis"
+    ],
+    "category": "backend",
+    "market_demand": 0.66,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "rest-api",
+    "aliases": [
+      "REST",
+      "REST API",
+      "RESTful"
+    ],
+    "category": "backend",
+    "market_demand": 0.85,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "spring-boot",
+    "aliases": [
+      "Spring Boot",
+      "SpringBoot"
+    ],
+    "category": "backend",
+    "market_demand": 0.74,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "sql",
+    "aliases": [
+      "SQL",
+      "ANSI SQL"
+    ],
+    "category": "backend",
+    "market_demand": 0.88,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "aws",
+    "aliases": [
+      "AWS"
+    ],
+    "category": "devops",
+    "market_demand": 0.74,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "azure",
+    "aliases": [
+      "Azure",
+      "Microsoft Azure"
+    ],
+    "category": "devops",
+    "market_demand": 0.7,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "bash",
+    "aliases": [
+      "Bash",
+      "shell scripting"
+    ],
+    "category": "devops",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "ci-cd",
+    "aliases": [
+      "CI/CD",
+      "CICD",
+      "continuous integration"
+    ],
+    "category": "devops",
+    "market_demand": 0.76,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "docker",
+    "aliases": [
+      "Docker"
+    ],
+    "category": "devops",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "gcp",
+    "aliases": [
+      "GCP",
+      "Google Cloud"
+    ],
+    "category": "devops",
+    "market_demand": 0.66,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "git",
+    "aliases": [
+      "Git",
+      "version control"
+    ],
+    "category": "devops",
+    "market_demand": 0.9,
+    "avg_learn_weeks": 2
+  },
+  {
+    "name": "github-actions",
+    "aliases": [
+      "GitHub Actions"
+    ],
+    "category": "devops",
+    "market_demand": 0.66,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "kubernetes",
+    "aliases": [
+      "Kubernetes",
+      "K8s"
+    ],
+    "category": "devops",
+    "market_demand": 0.78,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "linux",
+    "aliases": [
+      "Linux",
+      "Unix"
+    ],
+    "category": "devops",
+    "market_demand": 0.82,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "nginx",
+    "aliases": [
+      "Nginx",
+      "NGINX"
+    ],
+    "category": "devops",
+    "market_demand": 0.6,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "terraform",
+    "aliases": [
+      "Terraform"
+    ],
+    "category": "devops",
+    "market_demand": 0.64,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "analog-circuit-design",
+    "aliases": [
+      "analog circuit design",
+      "analog design"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 10
+  },
+  {
+    "name": "arm-microcontrollers",
+    "aliases": [
+      "ARM",
+      "microcontrollers",
+      "STM32"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.62,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "autocad-electrical",
+    "aliases": [
+      "AutoCAD Electrical",
+      "AutoCAD"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.45,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "can-protocol",
+    "aliases": [
+      "CAN bus",
+      "CAN protocol"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.5,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "embedded-c",
+    "aliases": [
+      "Embedded C",
+      "embedded systems"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "fpga",
+    "aliases": [
+      "FPGA"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.6,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "i2c-spi",
+    "aliases": [
+      "I2C",
+      "SPI",
+      "UART"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.52,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "matlab",
+    "aliases": [
+      "MATLAB",
+      "Simulink"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.6,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "pcb-design",
+    "aliases": [
+      "PCB Design",
+      "PCB layout",
+      "Altium"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.58,
+    "avg_learn_weeks": 7
+  },
+  {
+    "name": "plc",
+    "aliases": [
+      "PLC",
+      "PLC programming",
+      "ladder logic"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.52,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "power-electronics",
+    "aliases": [
+      "power electronics"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 10
+  },
+  {
+    "name": "rtos",
+    "aliases": [
+      "RTOS",
+      "FreeRTOS",
+      "real-time operating system"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.58,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "signal-processing",
+    "aliases": [
+      "Signal Processing",
+      "DSP"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.56,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "simulink",
+    "aliases": [
+      "Simulink"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.58,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "systemverilog",
+    "aliases": [
+      "SystemVerilog"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "verilog",
+    "aliases": [
+      "Verilog",
+      "Verilog HDL"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "vhdl",
+    "aliases": [
+      "VHDL"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.5,
+    "avg_learn_weeks": 8
+  },
+  {
+    "name": "vlsi",
+    "aliases": [
+      "VLSI",
+      "VLSI design"
+    ],
+    "category": "eee_ece",
+    "market_demand": 0.48,
+    "avg_learn_weeks": 10
+  },
+  {
+    "name": "css",
+    "aliases": [
+      "CSS",
+      "CSS3"
+    ],
+    "category": "frontend",
+    "market_demand": 0.75,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "html",
+    "aliases": [
+      "HTML",
+      "HTML5"
+    ],
+    "category": "frontend",
+    "market_demand": 0.75,
+    "avg_learn_weeks": 2
+  },
+  {
+    "name": "javascript",
+    "aliases": [
+      "JavaScript",
+      "JS",
+      "ECMAScript"
+    ],
+    "category": "frontend",
+    "market_demand": 0.88,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "nextjs",
+    "aliases": [
+      "Next.js",
+      "NextJS"
+    ],
+    "category": "frontend",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "react",
+    "aliases": [
+      "React"
+    ],
+    "category": "frontend",
+    "market_demand": 0.72,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "redux",
+    "aliases": [
+      "Redux"
+    ],
+    "category": "frontend",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "responsive-design",
+    "aliases": [
+      "responsive design",
+      "responsive web design"
+    ],
+    "category": "frontend",
+    "market_demand": 0.6,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "tailwind-css",
+    "aliases": [
+      "Tailwind",
+      "Tailwind CSS"
+    ],
+    "category": "frontend",
+    "market_demand": 0.62,
+    "avg_learn_weeks": 2
+  },
+  {
+    "name": "typescript",
+    "aliases": [
+      "TypeScript"
+    ],
+    "category": "frontend",
+    "market_demand": 0.65,
+    "avg_learn_weeks": 3
+  },
+  {
+    "name": "vue",
+    "aliases": [
+      "Vue",
+      "Vue.js",
+      "VueJS"
+    ],
+    "category": "frontend",
+    "market_demand": 0.55,
+    "avg_learn_weeks": 5
+  },
+  {
+    "name": "computer-vision",
+    "aliases": [
+      "computer vision",
+      "OpenCV"
+    ],
+    "category": "ml",
+    "market_demand": 0.68,
+    "avg_learn_weeks": 10
+  },
+  {
+    "name": "data-analysis",
+    "aliases": [
+      "data analysis",
+      "data analytics"
+    ],
+    "category": "ml",
+    "market_demand": 0.78,
+    "avg_learn_weeks": 6
+  },
+  {
+    "name": "deep-learning",
+    "aliases": [
+      "deep learning"
+    ],
+    "category": "ml",
+    "market_demand": 0.8,
+    "avg_learn_weeks": 14
+  },
+  {
+    "name": "machine-learning",
+    "aliases": [
+      "machine learning",
+      "ML"
+    ],
+    "category": "ml",
+    "market_demand": 0.85,
+    "avg_learn_weeks": 12
+  },
+  {
+    "name": "matplotlib",
+    "aliases": [
+      "Matplotlib",
+      "Seaborn"
+    ],
+    "category": "ml",
+    "market_demand": 0.58,
+    "avg_learn_weeks": 2
+  },
+  {
+    "name": "nlp",
+    "aliases": [
+      "NLP",
+      "natural language processing"
+    ],
+    "category": "ml",
+    "market_demand": 0.72,
+    "avg_learn_weeks": 10
   },
   {
     "name": "numpy",
@@ -30,6 +649,25 @@
     "avg_learn_weeks": 3
   },
   {
+    "name": "power-bi",
+    "aliases": [
+      "Power BI",
+      "PowerBI"
+    ],
+    "category": "ml",
+    "market_demand": 0.62,
+    "avg_learn_weeks": 4
+  },
+  {
+    "name": "pytorch",
+    "aliases": [
+      "PyTorch"
+    ],
+    "category": "ml",
+    "market_demand": 0.76,
+    "avg_learn_weeks": 8
+  },
+  {
     "name": "scikit-learn",
     "aliases": [
       "sklearn"
@@ -39,159 +677,22 @@
     "avg_learn_weeks": 4
   },
   {
-    "name": "fastapi",
+    "name": "statistics",
     "aliases": [
-      "FastAPI"
+      "statistics",
+      "statistical analysis"
     ],
-    "category": "backend",
-    "market_demand": 0.61,
-    "avg_learn_weeks": 3
-  },
-  {
-    "name": "postgresql",
-    "aliases": [
-      "postgres"
-    ],
-    "category": "backend",
-    "market_demand": 0.7,
-    "avg_learn_weeks": 4
-  },
-  {
-    "name": "docker",
-    "aliases": [
-      "Docker"
-    ],
-    "category": "devops",
-    "market_demand": 0.68,
-    "avg_learn_weeks": 3
-  },
-  {
-    "name": "aws",
-    "aliases": [
-      "AWS"
-    ],
-    "category": "devops",
+    "category": "ml",
     "market_demand": 0.74,
     "avg_learn_weeks": 8
   },
   {
-    "name": "react",
+    "name": "tensorflow",
     "aliases": [
-      "React"
+      "TensorFlow"
     ],
-    "category": "frontend",
-    "market_demand": 0.72,
-    "avg_learn_weeks": 6
-  },
-  {
-    "name": "typescript",
-    "aliases": [
-      "TypeScript"
-    ],
-    "category": "frontend",
-    "market_demand": 0.65,
-    "avg_learn_weeks": 3
-  },
-  {
-    "name": "verilog",
-    "aliases": [
-      "Verilog",
-      "Verilog HDL"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.55,
+    "category": "ml",
+    "market_demand": 0.7,
     "avg_learn_weeks": 8
-  },
-  {
-    "name": "vhdl",
-    "aliases": [
-      "VHDL"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.5,
-    "avg_learn_weeks": 8
-  },
-  {
-    "name": "embedded-c",
-    "aliases": [
-      "Embedded C",
-      "embedded systems"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.68,
-    "avg_learn_weeks": 6
-  },
-  {
-    "name": "matlab",
-    "aliases": [
-      "MATLAB",
-      "Simulink"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.6,
-    "avg_learn_weeks": 5
-  },
-  {
-    "name": "plc",
-    "aliases": [
-      "PLC",
-      "PLC programming",
-      "ladder logic"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.52,
-    "avg_learn_weeks": 6
-  },
-  {
-    "name": "pcb-design",
-    "aliases": [
-      "PCB Design",
-      "PCB layout",
-      "Altium"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.58,
-    "avg_learn_weeks": 7
-  },
-  {
-    "name": "vlsi",
-    "aliases": [
-      "VLSI",
-      "VLSI design"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.48,
-    "avg_learn_weeks": 10
-  },
-  {
-    "name": "signal-processing",
-    "aliases": [
-      "Signal Processing",
-      "DSP"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.56,
-    "avg_learn_weeks": 8
-  },
-  {
-    "name": "arm-microcontrollers",
-    "aliases": [
-      "ARM",
-      "microcontrollers",
-      "STM32"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.62,
-    "avg_learn_weeks": 6
-  },
-  {
-    "name": "autocad-electrical",
-    "aliases": [
-      "AutoCAD Electrical",
-      "AutoCAD"
-    ],
-    "category": "eee_ece",
-    "market_demand": 0.45,
-    "avg_learn_weeks": 4
   }
 ]

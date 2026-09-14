@@ -3,7 +3,12 @@
     "title": "Backend Engineer",
     "company": "Northwind Systems",
     "description": "Build and maintain REST APIs and backend services.",
-    "required_skills": ["python", "fastapi", "postgresql", "docker"],
+    "required_skills": [
+      "python",
+      "fastapi",
+      "postgresql",
+      "docker"
+    ],
     "experience_years": 1,
     "salary_min": 60000,
     "salary_max": 95000,
@@ -14,7 +19,10 @@
     "title": "Frontend Engineer",
     "company": "Northwind Systems",
     "description": "Build user-facing web applications with React and TypeScript.",
-    "required_skills": ["react", "typescript"],
+    "required_skills": [
+      "react",
+      "typescript"
+    ],
     "experience_years": 1,
     "salary_min": 55000,
     "salary_max": 90000,
@@ -25,7 +33,12 @@
     "title": "Data Scientist",
     "company": "Insight Analytics",
     "description": "Analyze datasets and build predictive models.",
-    "required_skills": ["python", "numpy", "pandas", "scikit-learn"],
+    "required_skills": [
+      "python",
+      "numpy",
+      "pandas",
+      "scikit-learn"
+    ],
     "experience_years": 2,
     "salary_min": 70000,
     "salary_max": 110000,
@@ -36,7 +49,11 @@
     "title": "DevOps Engineer",
     "company": "CloudForge",
     "description": "Manage cloud infrastructure and deployment pipelines.",
-    "required_skills": ["docker", "aws", "postgresql"],
+    "required_skills": [
+      "docker",
+      "aws",
+      "postgresql"
+    ],
     "experience_years": 2,
     "salary_min": 65000,
     "salary_max": 100000,
@@ -47,7 +64,11 @@
     "title": "Embedded Systems Engineer",
     "company": "Voltrix Electronics",
     "description": "Develop firmware for embedded devices using ARM microcontrollers.",
-    "required_skills": ["embedded-c", "arm-microcontrollers", "plc"],
+    "required_skills": [
+      "embedded-c",
+      "arm-microcontrollers",
+      "plc"
+    ],
     "experience_years": 1,
     "salary_min": 50000,
     "salary_max": 85000,
@@ -58,7 +79,11 @@
     "title": "VLSI Design Engineer",
     "company": "Voltrix Electronics",
     "description": "Design and verify digital circuits using HDL.",
-    "required_skills": ["verilog", "vhdl", "vlsi"],
+    "required_skills": [
+      "verilog",
+      "vhdl",
+      "vlsi"
+    ],
     "experience_years": 2,
     "salary_min": 60000,
     "salary_max": 95000,
@@ -69,7 +94,11 @@
     "title": "Signal Processing Engineer",
     "company": "Wavelength Labs",
     "description": "Design DSP algorithms for communication systems.",
-    "required_skills": ["matlab", "signal-processing", "python"],
+    "required_skills": [
+      "matlab",
+      "signal-processing",
+      "python"
+    ],
     "experience_years": 2,
     "salary_min": 62000,
     "salary_max": 98000,
@@ -80,11 +109,387 @@
     "title": "PCB Design Engineer",
     "company": "Circuitry Works",
     "description": "Design and layout printed circuit boards for consumer electronics.",
-    "required_skills": ["pcb-design", "autocad-electrical", "embedded-c"],
+    "required_skills": [
+      "pcb-design",
+      "autocad-electrical",
+      "embedded-c"
+    ],
     "experience_years": 1,
     "salary_min": 48000,
     "salary_max": 80000,
     "location": "Chennai, India",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Junior Backend Developer",
+    "company": "Northwind Systems",
+    "description": "Support REST API development and database work alongside senior engineers.",
+    "required_skills": [
+      "python",
+      "sql",
+      "rest-api",
+      "git"
+    ],
+    "experience_years": 0,
+    "salary_min": 45000,
+    "salary_max": 65000,
+    "location": "Hybrid",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Python Backend Engineer",
+    "company": "Larkspur Labs",
+    "description": "Design and ship Django services backed by PostgreSQL.",
+    "required_skills": [
+      "python",
+      "django",
+      "postgresql",
+      "rest-api",
+      "docker"
+    ],
+    "experience_years": 2,
+    "salary_min": 70000,
+    "salary_max": 105000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Node.js Backend Engineer",
+    "company": "Bluewave Digital",
+    "description": "Build Express services and event-driven integrations.",
+    "required_skills": [
+      "javascript",
+      "nodejs",
+      "expressjs",
+      "mongodb",
+      "rest-api"
+    ],
+    "experience_years": 2,
+    "salary_min": 68000,
+    "salary_max": 100000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Java Backend Engineer",
+    "company": "Meridian Financial",
+    "description": "Maintain Spring Boot microservices in a regulated environment.",
+    "required_skills": [
+      "java",
+      "spring-boot",
+      "sql",
+      "microservices",
+      "kafka"
+    ],
+    "experience_years": 3,
+    "salary_min": 80000,
+    "salary_max": 120000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Full Stack Developer",
+    "company": "Larkspur Labs",
+    "description": "Work across a React frontend and a FastAPI backend.",
+    "required_skills": [
+      "javascript",
+      "react",
+      "typescript",
+      "python",
+      "fastapi",
+      "postgresql"
+    ],
+    "experience_years": 2,
+    "salary_min": 75000,
+    "salary_max": 110000,
+    "location": "Hybrid",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Junior Frontend Developer",
+    "company": "Bluewave Digital",
+    "description": "Build responsive interfaces from design handoffs.",
+    "required_skills": [
+      "html",
+      "css",
+      "javascript",
+      "responsive-design",
+      "git"
+    ],
+    "experience_years": 0,
+    "salary_min": 42000,
+    "salary_max": 62000,
+    "location": "Hybrid",
+    "job_type": "full_time"
+  },
+  {
+    "title": "React Developer",
+    "company": "Northwind Systems",
+    "description": "Own feature delivery in a large React and TypeScript codebase.",
+    "required_skills": [
+      "javascript",
+      "react",
+      "typescript",
+      "redux",
+      "tailwind-css"
+    ],
+    "experience_years": 2,
+    "salary_min": 70000,
+    "salary_max": 105000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Next.js Engineer",
+    "company": "Cobalt Commerce",
+    "description": "Build server-rendered storefronts with Next.js.",
+    "required_skills": [
+      "javascript",
+      "react",
+      "nextjs",
+      "typescript",
+      "css"
+    ],
+    "experience_years": 3,
+    "salary_min": 78000,
+    "salary_max": 115000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Machine Learning Engineer",
+    "company": "Insight Analytics",
+    "description": "Train and deploy models into production pipelines.",
+    "required_skills": [
+      "python",
+      "machine-learning",
+      "scikit-learn",
+      "pytorch",
+      "docker"
+    ],
+    "experience_years": 3,
+    "salary_min": 95000,
+    "salary_max": 140000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Junior Data Analyst",
+    "company": "Insight Analytics",
+    "description": "Turn raw datasets into dashboards and written findings.",
+    "required_skills": [
+      "sql",
+      "python",
+      "pandas",
+      "data-analysis",
+      "power-bi"
+    ],
+    "experience_years": 0,
+    "salary_min": 48000,
+    "salary_max": 70000,
+    "location": "Hybrid",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Data Engineer",
+    "company": "Cobalt Commerce",
+    "description": "Build and operate batch and streaming data pipelines.",
+    "required_skills": [
+      "python",
+      "sql",
+      "kafka",
+      "postgresql",
+      "docker",
+      "aws"
+    ],
+    "experience_years": 3,
+    "salary_min": 90000,
+    "salary_max": 130000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "NLP Engineer",
+    "company": "Wavelength Labs",
+    "description": "Build language models and text pipelines for production use.",
+    "required_skills": [
+      "python",
+      "deep-learning",
+      "nlp",
+      "pytorch",
+      "machine-learning"
+    ],
+    "experience_years": 3,
+    "salary_min": 100000,
+    "salary_max": 145000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Computer Vision Engineer",
+    "company": "Voltrix Electronics",
+    "description": "Develop vision models for inspection and robotics systems.",
+    "required_skills": [
+      "python",
+      "computer-vision",
+      "deep-learning",
+      "pytorch",
+      "numpy"
+    ],
+    "experience_years": 3,
+    "salary_min": 95000,
+    "salary_max": 138000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Site Reliability Engineer",
+    "company": "CloudForge",
+    "description": "Keep production services healthy, observable, and recoverable.",
+    "required_skills": [
+      "linux",
+      "kubernetes",
+      "docker",
+      "terraform",
+      "aws",
+      "bash"
+    ],
+    "experience_years": 4,
+    "salary_min": 105000,
+    "salary_max": 150000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Platform Engineer",
+    "company": "CloudForge",
+    "description": "Own CI/CD and internal developer tooling.",
+    "required_skills": [
+      "docker",
+      "kubernetes",
+      "ci-cd",
+      "github-actions",
+      "linux",
+      "git"
+    ],
+    "experience_years": 3,
+    "salary_min": 95000,
+    "salary_max": 135000,
+    "location": "Remote",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Cloud Engineer (Azure)",
+    "company": "Meridian Financial",
+    "description": "Design and run workloads on Azure with infrastructure as code.",
+    "required_skills": [
+      "azure",
+      "terraform",
+      "docker",
+      "linux",
+      "ci-cd"
+    ],
+    "experience_years": 3,
+    "salary_min": 90000,
+    "salary_max": 130000,
+    "location": "Hybrid",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Embedded Firmware Engineer",
+    "company": "Voltrix Electronics",
+    "description": "Write firmware for ARM microcontrollers with an RTOS.",
+    "required_skills": [
+      "embedded-c",
+      "arm-microcontrollers",
+      "rtos",
+      "i2c-spi"
+    ],
+    "experience_years": 2,
+    "salary_min": 70000,
+    "salary_max": 105000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "FPGA Design Engineer",
+    "company": "Voltrix Electronics",
+    "description": "Implement and verify RTL designs on FPGA targets.",
+    "required_skills": [
+      "verilog",
+      "systemverilog",
+      "fpga",
+      "vhdl"
+    ],
+    "experience_years": 2,
+    "salary_min": 80000,
+    "salary_max": 120000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Automotive Embedded Engineer",
+    "company": "Voltrix Electronics",
+    "description": "Develop ECU software and CAN bus communication stacks.",
+    "required_skills": [
+      "embedded-c",
+      "can-protocol",
+      "rtos",
+      "arm-microcontrollers"
+    ],
+    "experience_years": 3,
+    "salary_min": 78000,
+    "salary_max": 115000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Control Systems Engineer",
+    "company": "Wavelength Labs",
+    "description": "Model and tune control systems for industrial equipment.",
+    "required_skills": [
+      "matlab",
+      "simulink",
+      "signal-processing",
+      "plc"
+    ],
+    "experience_years": 2,
+    "salary_min": 72000,
+    "salary_max": 108000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "Power Electronics Engineer",
+    "company": "Circuitry Works",
+    "description": "Design converters and power stages from schematic to board.",
+    "required_skills": [
+      "power-electronics",
+      "analog-circuit-design",
+      "pcb-design",
+      "matlab"
+    ],
+    "experience_years": 3,
+    "salary_min": 75000,
+    "salary_max": 112000,
+    "location": "On-site",
+    "job_type": "full_time"
+  },
+  {
+    "title": "QA Automation Engineer",
+    "company": "Northwind Systems",
+    "description": "Build and maintain automated test suites and CI checks.",
+    "required_skills": [
+      "python",
+      "git",
+      "ci-cd",
+      "rest-api",
+      "docker"
+    ],
+    "experience_years": 2,
+    "salary_min": 65000,
+    "salary_max": 95000,
+    "location": "Remote",
     "job_type": "full_time"
   }
 ]

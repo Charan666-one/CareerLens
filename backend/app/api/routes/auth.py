@@ -2,7 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.core.deps import get_current_user
-from app.core.security import create_access_token, hash_password, verify_password
+from app.core.security import (
+    create_access_token,
+    hash_password,
+    verify_dummy_password,
+    verify_password,
+)
 from app.db.database import get_db
 from app.db.models import User
 from app.schemas.auth import Token, UserLogin, UserOut, UserRegister
@@ -35,7 +40,18 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(payload: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
-    if not user or not verify_password(payload.password, user.hashed_password):
+
+    # Both failure paths have to cost about the same. Short-circuiting on a
+    # missing user would answer in ~7 ms while a wrong password for a real
+    # account takes ~67 ms, which tells an attacker which emails have
+    # accounts here. The dummy verify burns the same bcrypt time instead.
+    if user is None:
+        verify_dummy_password(payload.password)
+        password_ok = False
+    else:
+        password_ok = verify_password(payload.password, user.hashed_password)
+
+    if not password_ok:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",

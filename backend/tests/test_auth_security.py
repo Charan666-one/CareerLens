@@ -49,6 +49,40 @@ def test_dummy_verify_runs_and_returns_nothing():
     assert verify_dummy_password("anything-at-all") is None
 
 
+def test_register_signs_the_new_user_straight_in(client):
+    """Registering returns a working token, so there is no second sign-in.
+
+    Asserts the token actually authenticates rather than merely being
+    present - a well-formed but unusable token would pass a shape check
+    and still leave the user stuck at the login form."""
+    created = client.post(
+        "/api/auth/register",
+        json={"email": "straight.in@example.com", "password": "a-real-password-123", "name": "SI"},
+    )
+    assert created.status_code == 201
+
+    token = created.json()["access_token"]
+    assert created.json()["token_type"] == "bearer"
+
+    whoami = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert whoami.status_code == 200
+    assert whoami.json()["email"] == "straight.in@example.com"
+
+
+def test_register_still_returns_every_user_field_it_used_to(client):
+    """The token fields were added to the response, not swapped in for the
+    user payload - anything reading id or email keeps working."""
+    body = client.post(
+        "/api/auth/register",
+        json={"email": "additive@example.com", "password": "a-real-password-123", "name": "Add"},
+    ).json()
+
+    for field in ("id", "email", "name", "target_role", "experience_years", "created_at"):
+        assert field in body, f"register response lost {field}"
+    assert body["email"] == "additive@example.com"
+    assert body["name"] == "Add"
+
+
 def test_register_then_login_round_trip(client):
     body = {"email": "round.trip@example.com", "password": "a-real-password-123", "name": "RT"}
 

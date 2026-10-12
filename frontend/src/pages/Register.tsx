@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Button from "@/components/ui/Button"
 import { register as registerUser } from "@/services/authApi"
 import { normalizeApiError } from "@/services/errors"
+import { useAuthStore } from "@/store/auth"
 
 interface RegisterForm {
   name: string
@@ -13,6 +14,7 @@ interface RegisterForm {
 
 export default function Register() {
   const { register, handleSubmit, formState } = useForm<RegisterForm>()
+  const setToken = useAuthStore((s) => s.setToken)
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -21,12 +23,13 @@ export default function Register() {
     setError(null)
     setSubmitting(true)
     try {
-      await registerUser(values)
-      // register doesn't return a token - sign in separately.
-      navigate("/login", { state: { registered: true }, replace: true })
+      // register returns a token, so go straight into the app rather than
+      // sending the user to the login form to retype what they just chose.
+      const { access_token } = await registerUser(values)
+      setToken(access_token)
+      navigate("/", { replace: true })
     } catch (err) {
       setError(normalizeApiError(err).message)
-    } finally {
       setSubmitting(false)
     }
   }

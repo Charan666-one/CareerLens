@@ -33,3 +33,20 @@ class UserOut(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class RegisterResult(UserOut):
+    """What POST /api/auth/register returns: the new user, plus a token.
+
+    Registering already proves the caller controls the credentials, so
+    making them sign in again right afterwards bought nothing and cost a
+    second bcrypt verify plus a round trip through the login form. The
+    token is issued the same way login issues it, with the same expiry.
+
+    This extends UserOut rather than replacing it, so every field the
+    endpoint returned before is still there - only the two token fields
+    are new.
+    """
+
+    access_token: str
+    token_type: str = "bearer"

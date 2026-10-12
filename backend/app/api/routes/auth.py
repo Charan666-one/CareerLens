@@ -10,12 +10,12 @@ from app.core.security import (
 )
 from app.db.database import get_db
 from app.db.models import User
-from app.schemas.auth import Token, UserLogin, UserOut, UserRegister
+from app.schemas.auth import RegisterResult, Token, UserLogin, UserOut, UserRegister
 
 router = APIRouter()
 
 
-@router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=RegisterResult, status_code=status.HTTP_201_CREATED)
 def register(payload: UserRegister, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == payload.email).first()
     if existing_user:
@@ -34,7 +34,15 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
-    return user
+
+    # Sign the new account in directly. Setting a password is already proof
+    # of control over it, so bouncing the user to the login form to retype
+    # what they just chose added a second bcrypt verify and a form round
+    # trip for nothing.
+    return RegisterResult(
+        **UserOut.model_validate(user).model_dump(),
+        access_token=create_access_token(data={"sub": str(user.id)}),
+    )
 
 
 @router.post("/login", response_model=Token)

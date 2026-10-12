@@ -4,7 +4,7 @@
 
 ## Executive Summary
 
-CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register, log in, upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite running in CI; what remains is a live public deployment.
+CareerLens is a working web application that helps users analyze a resume, extract relevant skills, compare those skills against a curated job market dataset, and receive a prioritized roadmap for closing gaps. A user can go end to end today: register (which signs them straight in), upload a resume, and watch all seven analysis stages run and render progressively. Scoring is an explainable hybrid of three signals (TF-IDF text similarity, skill-graph proximity, and market demand), and every score exposes its component breakdown. The backend and frontend are both implemented and covered by an automated test suite running in CI; what remains is a live public deployment.
 
 - Current Status: 🟩 Feature Complete (pending public deployment)
 - Estimated Completion: ~90%
@@ -82,7 +82,7 @@ careerlens/
 │   │   └── services/          # NLP, graph, recommendation, roadmap
 │   ├── alembic/               # database migrations
 │   ├── data/seed/             # seed JSON files
-│   ├── tests/                 # 117 backend tests (pytest, real Postgres)
+│   ├── tests/                 # 126 backend tests (pytest, real Postgres)
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
@@ -111,7 +111,7 @@ Overall Progress: ██████████████████░░ 9
 | Authentication | ✅ Complete | Register/login/me endpoints and JWT helpers are implemented. |
 | Database | ✅ Complete | ORM models and Alembic migration structure exist. |
 | API | ✅ Complete | All 7 pipeline stages plus auth; jobs/users remain unused stubs. |
-| Testing | ✅ Complete | 117 tests: unit coverage per stage, route integration tests, deployment probes, and seed-data integrity. |
+| Testing | ✅ Complete | 126 tests: unit coverage per stage, route integration tests, deployment probes, seed-data integrity, and auth cost/timing. |
 | Deployment | 🟨 Configured, not yet live | Production Dockerfiles, migrate-and-seed on boot, Caddy SPA serving, and CI are in place; no live public URL yet. |
 | Documentation | ✅ Complete | README, CLAUDE.md, and docs/ reflect the current implementation. |
 
@@ -132,7 +132,7 @@ Overall Progress: ██████████████████░░ 9
 
 | Feature | Status | Completion | Notes |
 |---|---|---:|---|
-| User Registration | ✅ | 100% | Backend endpoint exists and hashes passwords. |
+| User Registration | ✅ | 100% | Hashes the password and signs the new user straight in. |
 | User Login | ✅ | 100% | JWT issuance and validation are implemented. |
 | Resume Upload | ✅ | 100% | PDF/DOCX/TXT supported; text extraction and skill matching work. |
 | Skill Extraction | ✅ | 90% | Keyword/alias matching against a 71-skill seeded knowledge base. |
@@ -141,7 +141,7 @@ Overall Progress: ██████████████████░░ 9
 | Dashboard UI | ✅ | 100% | Drives all 7 stages with progressive reveal and a stage tracker. |
 | Jobs UI | ✅ | 100% | Eligibility-aware recommendation cards with named skill gaps. |
 | Roadmap UI | ✅ | 100% | Sequenced learning path with cumulative weeks. |
-| Testing | ✅ | 100% | 117 tests covering every stage, route, prerequisite violation, the health probe, and seed integrity. |
+| Testing | ✅ | 100% | 126 tests covering every stage, route, prerequisite violation, the health probe, seed integrity, and the auth hardening. |
 | Deployment Automation | 🟨 | 90% | Production Dockerfiles, compose, and CI on every push; no live deploy yet. |
 
 ---
@@ -196,7 +196,7 @@ The following areas are active or incomplete:
 | Method | Route | Status | Purpose |
 |---|---|---|---|
 | GET | / | ✅ | Service health check |
-| POST | /api/auth/register | ✅ | Create a new user |
+| POST | /api/auth/register | ✅ | Create a new user and return an access token |
 | POST | /api/auth/login | ✅ | Issue a JWT |
 | GET | /api/auth/me | ✅ | Fetch current authenticated user |
 | GET | /api/recommendations | ✅ | Return scored job recommendations |
@@ -446,7 +446,7 @@ The repository is structured well for a growing product:
 
 ## Current Development Snapshot
 
-- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 117 tests plus CI cover the backend.
+- Where am I right now? Feature complete for the MVP scope: all seven pipeline stages run end to end, the frontend renders them progressively, and 126 tests plus CI cover the backend.
 - What was the last major thing completed? Production deployment configuration — migrate-and-seed on boot, a non-root backend image, and a CI workflow running the suite and the frontend build on every push.
 - What should I work on next? Deploy to a live public URL.
 - What blockers exist? None blocking a deploy. The main product limitation is that market-demand figures are curated estimates rather than live data.

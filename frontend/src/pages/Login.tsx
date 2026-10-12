@@ -19,8 +19,6 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
-  const registeredNotice = (location.state as { registered?: boolean } | null)?.registered
-
   const onSubmit = async (values: LoginForm) => {
     setError(null)
     setSubmitting(true)
@@ -39,10 +37,6 @@ export default function Login() {
   return (
     <div className="bg-stone-raised border border-stone-line rounded p-7">
       <h1 className="font-display text-xl mb-5 text-center">Log in</h1>
-
-      {registeredNotice && (
-        <p className="text-good text-sm mb-4 text-center">Account created — log in to continue.</p>
-      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm">

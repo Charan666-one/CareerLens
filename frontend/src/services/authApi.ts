@@ -1,5 +1,5 @@
 import api from "@/services/api"
-import type { AuthTokenResponse, User } from "@/types"
+import type { AuthTokenResponse, RegisterResponse, User } from "@/types"
 
 export interface RegisterPayload {
   email: string
@@ -13,7 +13,7 @@ export interface LoginPayload {
 }
 
 export function register(payload: RegisterPayload) {
-  return api.post<User>("/api/auth/register", payload).then((r) => r.data)
+  return api.post<RegisterResponse>("/api/auth/register", payload).then((r) => r.data)
 }
 
 export function login(payload: LoginPayload) {

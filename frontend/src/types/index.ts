@@ -14,6 +14,10 @@ export interface AuthTokenResponse {
   token_type: string
 }
 
+// Registering signs you straight in, so /register returns the new user
+// and a token together - no second trip through the login form.
+export type RegisterResponse = User & AuthTokenResponse
+
 // Profile stage
 
 export interface ExtractedSkill {

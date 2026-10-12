@@ -26,8 +26,20 @@ export default function Register() {
       // register returns a token, so go straight into the app rather than
       // sending the user to the login form to retype what they just chose.
       const { access_token } = await registerUser(values)
-      setToken(access_token)
-      navigate("/", { replace: true })
+
+      if (access_token) {
+        setToken(access_token)
+        navigate("/", { replace: true })
+        return
+      }
+
+      // No token means we're talking to a backend from before register
+      // started issuing one. The two services deploy separately, so this
+      // frontend can be live against the older backend for a minute or
+      // two. Storing an undefined token here would look signed in, then
+      // fail every authenticated call and bounce the user out - sending
+      // them to the login form is the graceful way through that window.
+      navigate("/login", { replace: true })
     } catch (err) {
       setError(normalizeApiError(err).message)
       setSubmitting(false)
